@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0011",
+  "title": "本地深度子进程补下载模型时没有继承桌面代理",
+  "category": "network",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "Python",
+    "curl",
+    "checkpoint",
+    "HTTPS_PROXY",
+    "ALL_PROXY"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "桌面组件下载已完成，本地深度任务仍在模型补下载阶段超时，可能出现 curl: (28)。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "桌面组件下载已完成，本地深度任务仍在模型补下载阶段超时，可能出现 curl: (28)。"
+  ],
+  "environment": [
+    "已发布 Python 深度组件会补下缺失 checkpoint；父进程能读取系统代理，子进程使用自己的环境。"
+  ],
+  "cause": {
+    "summary": "Go 组件下载 transport 的系统代理选择没有同步传给 Python/curl 子进程，或被冲突的 ALL_PROXY/bypass 行为影响。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "从安全错误尾部确认失败处于模型补下载，而非 CPU/CUDA 推理或画布绑定。",
+      "核对实际子进程 HTTPS_PROXY/NO_PROXY 是否按桌面规则构造，只采集启用状态；校验模型大小和哈希。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "启动子进程时传递新解析的 HTTPS 代理和排除地址，清除冲突 ALL_PROXY；保留原任务与已有模型文件。",
+      "steps": [
+        "启动子进程时传递新解析的 HTTPS 代理和排除地址，清除冲突 ALL_PROXY；保留原任务与已有模型文件。"
+      ],
+      "verification": [
+        "使用真实子进程及受控代理验证下载路线和 bypass，缺失/损坏模型在正确路径补齐后再恢复原任务。"
+      ],
+      "risks": [
+        "不能只修父进程 downloader；不得把包含账号的代理地址写进诊断或盲目重做视频。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #142 对机制和处理的记录：Go 组件下载 transport 的系统代理选择没有同步传给 Python/curl 子进程，或被冲突的 ALL_PROXY/bypass 行为影响。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/142"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 21af10cd7301c5a1034a9d35b4c21e1d38db1359：backend/internal/depthcapture/env.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/21af10cd7301c5a1034a9d35b4c21e1d38db1359/backend/internal/depthcapture/env.go"
+    }
+  ],
+  "limitations": [
+    "PR 未覆盖已发布组件资产的替换，也未在原客户 Windows 视频上重跑；CUDA 等推理失败须另查。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

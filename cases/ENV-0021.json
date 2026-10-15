@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0021",
+  "title": "Windows GUI 启动 Node 助手时出现额外黑色控制台",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "CREATE_NO_WINDOW",
+    "Node",
+    "黑窗口",
+    "子进程"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "打开桌面助手会短暂或持续弹出命令行黑窗口。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "打开桌面助手会短暂或持续弹出命令行黑窗口。"
+  ],
+  "environment": [
+    "Windows GUI 进程通过原生进程创建启动 Node 宿主。"
+  ],
+  "cause": {
+    "summary": "子进程创建标志没有抑制独立控制台分配，与模型协议无关。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "确认窗口所属进程及创建参数，不凭窗口颜色判断运行失败。",
+      "核对 stdin 生命周期、stderr 诊断与退出后子进程清理。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "仅为受监督的 Windows GUI 子进程设置 CREATE_NO_WINDOW，同时保留诊断管道和关闭控制。",
+      "steps": [
+        "仅为受监督的 Windows GUI 子进程设置 CREATE_NO_WINDOW，同时保留诊断管道和关闭控制。"
+      ],
+      "verification": [
+        "真实启动助手没有独立控制台，stderr 可诊断，应用退出后宿主正常关闭。"
+      ],
+      "risks": [
+        "不能丢弃全部 stdout/stderr 或放弃生命周期监督来隐藏窗口。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #70 对机制和处理的记录：子进程创建标志没有抑制独立控制台分配，与模型协议无关。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/70"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 6be3a1323f2a90390aeeab42cf1bebfff94bcee5：backend/internal/assistantruntime/process_windows.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/6be3a1323f2a90390aeeab42cf1bebfff94bcee5/backend/internal/assistantruntime/process_windows.go"
+    }
+  ],
+  "limitations": [
+    "该标志只解决 Windows 进程窗口行为，不证明助手请求、权限和模型可用。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

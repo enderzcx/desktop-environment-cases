@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0017",
+  "title": "Windows 原生连接重置未被识别导致任务提前失败",
+  "category": "network",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "WSAECONNRESET",
+    "WSAECONNABORTED",
+    "TCP RST",
+    "原任务"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "视频查询或媒体下载中断，本地立即失败，上游任务可能仍在运行。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "视频查询或媒体下载中断，本地立即失败，上游任务可能仍在运行。"
+  ],
+  "environment": [
+    "Windows 原生 Winsock 错误经 HTTP 包装；其错误码与跨平台 syscall 常量不完全相同。"
+  ],
+  "cause": {
+    "summary": "仅匹配通用 ECONNRESET/EPIPE，遗漏 WSAECONNRESET/WSAECONNABORTED，错误地终止可恢复查询。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "读取结构化错误链，识别实际 Winsock 码和失败阶段。",
+      "保留上游任务 ID，区分创建回执丢失、查询断连与下载断连。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "增加原生连接中断识别，在取消和期限限制内继续查询/下载同一个任务。",
+      "steps": [
+        "增加原生连接中断识别，在取消和期限限制内继续查询/下载同一个任务。"
+      ],
+      "verification": [
+        "Windows 真实 TCP RST 后仅恢复 GET；创建回执不确定时不重复发送付费 POST。"
+      ],
+      "risks": [
+        "未知结果不能当作确认失败并重新生成；保留取消及重试终止条件。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #56 对机制和处理的记录：仅匹配通用 ECONNRESET/EPIPE，遗漏 WSAECONNRESET/WSAECONNABORTED，错误地终止可恢复查询。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/56"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 30d742bd77412c6fa9451d5b1eea512584570c57：backend/internal/outbound/connection_error_windows.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/30d742bd77412c6fa9451d5b1eea512584570c57/backend/internal/outbound/connection_error_windows.go"
+    }
+  ],
+  "limitations": [
+    "网络恢复不解决上游明确拒绝、内容审核或供应商任务已失败。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0023",
+  "title": "慢线路下载被总时长上限打断且不能续传",
+  "category": "network",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "慢网络",
+    "Cloudflare",
+    "总超时",
+    "Range",
+    "断点续传"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "大更新包持续有进度，但到固定时长失败，重试又从零开始。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "大更新包持续有进度，但到固定时长失败，重试又从零开始。"
+  ],
+  "environment": [
+    "历史更新下载器有 10 分钟总时限；慢线路或间歇断连会放大失败。"
+  ],
+  "cause": {
+    "summary": "总时长限制把持续慢速下载当成失效，中断后又不复用已下载字节，统一错误提示掩盖阶段。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "查看最后收到数据的时间与累计下载时间，区分慢速、有进展和真正停滞。",
+      "用受控慢速/断链服务检查 Range、Content-Range、200 和 416 行为。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "改为按无数据进展判断超时，保留 partial 并有界重试；完成后仍核对总大小和 SHA-256。",
+      "steps": [
+        "改为按无数据进展判断超时，保留 partial 并有界重试；完成后仍核对总大小和 SHA-256。"
+      ],
+      "verification": [
+        "有进度的慢下载继续；断链可恢复，服务器拒绝续传或校验失败时安全重下。"
+      ],
+      "risks": [
+        "不能取消大小、哈希和停滞限制；旧下载器仍需自己完成一次升级，必要时安装完整包。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #80 对机制和处理的记录：总时长限制把持续慢速下载当成失效，中断后又不复用已下载字节，统一错误提示掩盖阶段。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/80"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 f92e1f67f669b775babdc9fab96524280c316583：backend/internal/desktopupdate/http.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/f92e1f67f669b775babdc9fab96524280c316583/backend/internal/desktopupdate/http.go"
+    }
+  ],
+  "limitations": [
+    "线路可能影响速度，但历史根因在客户端控制；不把使用代理本身当故障结论。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

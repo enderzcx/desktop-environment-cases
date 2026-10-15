@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0046",
+  "title": "同一进程并发首次安装深度组件共写下载缓存",
+  "category": "installer",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "首次安装",
+    "并发下载",
+    "installationSlot",
+    "共享缓存"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "多个深度任务同时首次准备组件时，下载/解压可能竞争同一缓存和模型文件。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "多个深度任务同时首次准备组件时，下载/解压可能竞争同一缓存和模型文件。"
+  ],
+  "environment": [
+    "同一桌面进程内的多个首次安装请求共享组件与模型缓存，CPU/CUDA 变体也有共享文件。"
+  ],
+  "cause": {
+    "summary": "安装准备未串行化，同一缓存的下载、校验和提交流程可能同时写入。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "在隔离目录同时触发两个 Ensure，并对共享归档、模型和暂存提交记录检查。",
+      "区分安装并发与推理并发，确认排队操作仍响应取消。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "串行化同进程安装阶段，让等待者可取消；用受控暂存、签名、哈希与完整布局校验后提交。",
+      "steps": [
+        "串行化同进程安装阶段，让等待者可取消；用受控暂存、签名、哈希与完整布局校验后提交。"
+      ],
+      "verification": [
+        "并发请求不会混写共享文件，取消等待者不破坏正在安装的任务；已有组件可安全复用。"
+      ],
+      "risks": [
+        "进程内 channel 不是跨进程锁；不能据此声称多实例也已互斥。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #44 对机制和处理的记录：安装准备未串行化，同一缓存的下载、校验和提交流程可能同时写入。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/44"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 09e9e549bf3bb9fb9ba7ea12bc5febf342c78ca1：backend/internal/depthruntime/installer.go",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/09e9e549bf3bb9fb9ba7ea12bc5febf342c78ca1/backend/internal/depthruntime/installer.go"
+    }
+  ],
+  "limitations": [
+    "历史安装槽隔离安装而非全部推理；不同进程和任意外部下载器不在该机制覆盖内。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

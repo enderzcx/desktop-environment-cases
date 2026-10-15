@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0045",
+  "title": "视频结果地址过期或线路停滞时没有恢复同一任务的可达来源",
+  "category": "network",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "签名URL",
+    "403",
+    "COS",
+    "直链",
+    "原任务恢复"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "视频已生成，取回长期停滞，或恢复时遇到已失效的签名地址。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "视频已生成，取回长期停滞，或恢复时遇到已失效的签名地址。"
+  ],
+  "environment": [
+    "可信 BeefAPI 嵌入式通道可有上游直链和受管备用文件；第三方通道能力与鉴权不同。"
+  ],
+  "cause": {
+    "summary": "单一路线或旧签名不足以保证客户端下载，必须区分上游完成、备用文件 ready、链接可用和本地保存。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "保留原任务身份，记录停滞、HTTP 类别、实际完整字节及哈希，不保存签名 URL。",
+      "确认备用结果是否已 ready，区分签名拒绝、对象缺失和网络断链。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "按当前协议能力先取直链，失败或停滞时恢复同一任务并取得受管备用来源/新签名，第三方鉴权独立处理。",
+      "steps": [
+        "按当前协议能力先取直链，失败或停滞时恢复同一任务并取得受管备用来源/新签名，第三方鉴权独立处理。"
+      ],
+      "verification": [
+        "同一任务在签名被拒绝后能刷新并取到相同完整哈希的视频，画布保存与重开另验证。"
+      ],
+      "risks": [
+        "不要为取回重新生成；服务端 200、备用 ready 或代理响应不等于客户端收全。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #146 对机制和处理的记录：单一路线或旧签名不足以保证客户端下载，必须区分上游完成、备用文件 ready、链接可用和本地保存。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/146"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 bb5999e4339892ec9cae55f8ba3de26d78f214cb：backend/internal/generation/video_delivery.go",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/bb5999e4339892ec9cae55f8ba3de26d78f214cb/backend/internal/generation/video_delivery.go"
+    },
+    {
+      "id": "E3",
+      "type": "source_analysis",
+      "summary": "关联 PR #150：fix(video): 所有视频协议统一原任务交付与恢复",
+      "scope": "后续修复或相邻路径证据；不能将旧版本机制当作当前所有版本行为。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/150"
+    }
+  ],
+  "limitations": [
+    "历史实测故意破坏签名触发 403，不是等待真实到期；恢复耗时不等于生成到画布总耗时，阈值按具体版本核查。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

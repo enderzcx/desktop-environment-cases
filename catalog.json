@@ -46,6 +46,1153 @@
       "updated_at": "2026-10-15",
       "record": "cases/ENV-0002.json",
       "document": "docs/cases/ENV-0002.md"
+    },
+    {
+      "id": "ENV-0003",
+      "title": "减少动态效果使模型菜单定位到视口外",
+      "category": "runtime",
+      "platforms": [
+        "unknown"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "reduced-motion",
+        "Select",
+        "菜单离屏",
+        "transitionend"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0003.json",
+      "document": "docs/cases/ENV-0003.md"
+    },
+    {
+      "id": "ENV-0004",
+      "title": "Windows 安装目录重命名遇到共享冲突或错误 32",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "NSIS",
+        "MoveFileW",
+        "错误32",
+        "文件锁"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0004.json",
+      "document": "docs/cases/ENV-0004.md"
+    },
+    {
+      "id": "ENV-0005",
+      "title": "英文构建机把 NSIS 中文提示编译成乱码",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "NSIS",
+        "UTF-8",
+        "CP1252",
+        "中文乱码"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0005.json",
+      "document": "docs/cases/ENV-0005.md"
+    },
+    {
+      "id": "ENV-0006",
+      "title": "运行中的临时文件阻止整个存储目录迁移",
+      "category": "storage",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "cache/tmp",
+        "文件占用",
+        "迁移",
+        "CleanupPrevious"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0006.json",
+      "document": "docs/cases/ENV-0006.md"
+    },
+    {
+      "id": "ENV-0007",
+      "title": "迁移或重启后数据目录发现错误导致工作区看似丢失",
+      "category": "storage",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "数据目录",
+        "空工作区",
+        "移动磁盘",
+        "重启",
+        "模型配置"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0007.json",
+      "document": "docs/cases/ENV-0007.md"
+    },
+    {
+      "id": "ENV-0008",
+      "title": "本地凭据文件读取或解密失败被误报为模型参数错误",
+      "category": "storage",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "credential",
+        "密钥文件",
+        "权限",
+        "解密",
+        "本地凭据"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0008.json",
+      "document": "docs/cases/ENV-0008.md"
+    },
+    {
+      "id": "ENV-0009",
+      "title": "本地磁盘写满导致生成结果保存或取回失败",
+      "category": "storage",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "ENOSPC",
+        "磁盘空间",
+        "SQLite",
+        "local_disk_full",
+        "取回结果"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0009.json",
+      "document": "docs/cases/ENV-0009.md"
+    },
+    {
+      "id": "ENV-0010",
+      "title": "桌面启动未继承终端代理导致更新或组件下载失败",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "系统代理",
+        "HTTP_PROXY",
+        "NO_PROXY",
+        "Finder",
+        "WinHTTP"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0010.json",
+      "document": "docs/cases/ENV-0010.md"
+    },
+    {
+      "id": "ENV-0011",
+      "title": "本地深度子进程补下载模型时没有继承桌面代理",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "Python",
+        "curl",
+        "checkpoint",
+        "HTTPS_PROXY",
+        "ALL_PROXY"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0011.json",
+      "document": "docs/cases/ENV-0011.md"
+    },
+    {
+      "id": "ENV-0012",
+      "title": "PowerShell 生成的 ZIP 使用反斜杠条目被解压器拒绝",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "ZIP",
+        "PowerShell 5.1",
+        "反斜杠",
+        "路径校验"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0012.json",
+      "document": "docs/cases/ENV-0012.md"
+    },
+    {
+      "id": "ENV-0013",
+      "title": "PowerShell 5.1 提前关闭输出管道使正常工具自检失败",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "Windows PowerShell",
+        "BeefTV 深度组件构建"
+      ],
+      "keywords": [
+        "PowerShell 5.1",
+        "ffprobe",
+        "Select-Object",
+        "管道"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0013.json",
+      "document": "docs/cases/ENV-0013.md"
+    },
+    {
+      "id": "ENV-0014",
+      "title": "Windows 无法解码 HEVC 且缺少可用 FFmpeg 预览工具",
+      "category": "media",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "HEVC",
+        "H.265",
+        "H.264",
+        "FFmpeg",
+        "PATH"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0014.json",
+      "document": "docs/cases/ENV-0014.md"
+    },
+    {
+      "id": "ENV-0015",
+      "title": "构建目录已有媒体运行时但最终更新 ZIP 漏装",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "media-runtime",
+        "打包白名单",
+        "FFmpeg",
+        "最终归档"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0015.json",
+      "document": "docs/cases/ENV-0015.md"
+    },
+    {
+      "id": "ENV-0016",
+      "title": "已发布旧更新器拒绝新增 CLI 或媒体目录",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "旧更新器",
+        "额外文件",
+        "agent-host",
+        "CLI",
+        "布局"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0016.json",
+      "document": "docs/cases/ENV-0016.md"
+    },
+    {
+      "id": "ENV-0017",
+      "title": "Windows 原生连接重置未被识别导致任务提前失败",
+      "category": "network",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "WSAECONNRESET",
+        "WSAECONNABORTED",
+        "TCP RST",
+        "原任务"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0017.json",
+      "document": "docs/cases/ENV-0017.md"
+    },
+    {
+      "id": "ENV-0018",
+      "title": "macOS 首次安装被 Gatekeeper 拦截而更新清单验签正常",
+      "category": "security",
+      "platforms": [
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "Gatekeeper",
+        "ad-hoc",
+        "Developer ID",
+        "公证",
+        "spctl"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0018.json",
+      "document": "docs/cases/ENV-0018.md"
+    },
+    {
+      "id": "ENV-0019",
+      "title": "AppData 影子文件与运行时发现路径冲突（MSIX 待实测）",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "MSIX",
+        "AppData",
+        "runtime descriptor",
+        "旧端口"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0019.json",
+      "document": "docs/cases/ENV-0019.md"
+    },
+    {
+      "id": "ENV-0020",
+      "title": "Windows 发布包漏装 CLI 使 MCP 错启动桌面主程序",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "MCP",
+        "cli/beeftv.exe",
+        "桌面窗口",
+        "握手超时"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0020.json",
+      "document": "docs/cases/ENV-0020.md"
+    },
+    {
+      "id": "ENV-0021",
+      "title": "Windows GUI 启动 Node 助手时出现额外黑色控制台",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "CREATE_NO_WINDOW",
+        "Node",
+        "黑窗口",
+        "子进程"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0021.json",
+      "document": "docs/cases/ENV-0021.md"
+    },
+    {
+      "id": "ENV-0022",
+      "title": "成功升级后的暂存目录长期累积占用磁盘",
+      "category": "installer",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        ".beeftv-update",
+        "缓存清理",
+        "回滚",
+        "磁盘"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0022.json",
+      "document": "docs/cases/ENV-0022.md"
+    },
+    {
+      "id": "ENV-0023",
+      "title": "慢线路下载被总时长上限打断且不能续传",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "慢网络",
+        "Cloudflare",
+        "总超时",
+        "Range",
+        "断点续传"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0023.json",
+      "document": "docs/cases/ENV-0023.md"
+    },
+    {
+      "id": "ENV-0024",
+      "title": "Windows 在只读下载句柄上 Sync 导致校验后失败",
+      "category": "storage",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "FlushFileBuffers",
+        "Sync",
+        "O_RDWR",
+        "校验失败",
+        "v1.7.5"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0024.json",
+      "document": "docs/cases/ENV-0024.md"
+    },
+    {
+      "id": "ENV-0025",
+      "title": "SQLite 本地时区时间与 UTC 字符串比较使诊断包漏采",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "SQLite",
+        "UTC",
+        "时区",
+        "julianday",
+        "空诊断包"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0025.json",
+      "document": "docs/cases/ENV-0025.md"
+    },
+    {
+      "id": "ENV-0026",
+      "title": "旧预览数据库迁移编号冲突导致正式版缺列",
+      "category": "storage",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "SQLite",
+        "migration",
+        "failure_diagnostics",
+        "旧数据库",
+        "缺列"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0026.json",
+      "document": "docs/cases/ENV-0026.md"
+    },
+    {
+      "id": "ENV-0027",
+      "title": "Windows 原生保存框改名后丢失媒体扩展名",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "SaveFileDialog",
+        "扩展名",
+        "All Files",
+        "MIME",
+        "文件关联"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0027.json",
+      "document": "docs/cases/ENV-0027.md"
+    },
+    {
+      "id": "ENV-0028",
+      "title": "低速本地深度处理超过前端等待时间被提前判失败",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "本地推理",
+        "10分钟",
+        "CPU",
+        "任务恢复",
+        "depthcapture"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0028.json",
+      "document": "docs/cases/ENV-0028.md"
+    },
+    {
+      "id": "ENV-0029",
+      "title": "远端视频取帧的凭据策略与解码能力不匹配",
+      "category": "media",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "CORS",
+        "credentials",
+        "HEVC",
+        "关键帧",
+        "H.264"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0029.json",
+      "document": "docs/cases/ENV-0029.md"
+    },
+    {
+      "id": "ENV-0030",
+      "title": "浅色 Windows 系统主题让深色桌面应用出现白色标题栏",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "Wails",
+        "Windows主题",
+        "标题栏",
+        "Dark"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0030.json",
+      "document": "docs/cases/ENV-0030.md"
+    },
+    {
+      "id": "ENV-0031",
+      "title": "续传重置缓存失败后旧字节与新标识混用",
+      "category": "storage",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "partial",
+        "ETag",
+        "文件权限",
+        "truncate",
+        "续传缓存"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0031.json",
+      "document": "docs/cases/ENV-0031.md"
+    },
+    {
+      "id": "ENV-0032",
+      "title": "弱 ETag 或仅 Last-Modified 不足以保证断点字节属于同一对象",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "If-Range",
+        "弱ETag",
+        "Last-Modified",
+        "CDN",
+        "数据完整性"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0032.json",
+      "document": "docs/cases/ENV-0032.md"
+    },
+    {
+      "id": "ENV-0033",
+      "title": "发布机 Bun 版本不支持已提交锁文件格式",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "Bun",
+        "BeefTV 发布工具链"
+      ],
+      "keywords": [
+        "Bun",
+        "lockfileVersion",
+        "1.3.9",
+        "1.4.2",
+        "构建环境"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0033.json",
+      "document": "docs/cases/ENV-0033.md"
+    },
+    {
+      "id": "ENV-0034",
+      "title": "Windows CI 固定 MSYS2 路径与 Action 实际安装位置不同",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "GitHub Actions",
+        "BeefTV 发布工具链"
+      ],
+      "keywords": [
+        "MSYS2",
+        "MSYSTEM_PREFIX",
+        "setup-msys2",
+        "工具链路径"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0034.json",
+      "document": "docs/cases/ENV-0034.md"
+    },
+    {
+      "id": "ENV-0035",
+      "title": "Intel Mac 发布误用 ARM runner 造成双架构参数冲突",
+      "category": "runtime",
+      "platforms": [
+        "macos"
+      ],
+      "products": [
+        "GitHub Actions",
+        "BeefTV 发布工具链"
+      ],
+      "keywords": [
+        "Intel Mac",
+        "arm64",
+        "x86_64",
+        "Wails",
+        "runner架构"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0035.json",
+      "document": "docs/cases/ENV-0035.md"
+    },
+    {
+      "id": "ENV-0036",
+      "title": "图片读取或解码失败被画布显示成透明空节点",
+      "category": "media",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "Blob URL",
+        "图片透明",
+        "解码失败",
+        "重新加载",
+        "缩放"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0036.json",
+      "document": "docs/cases/ENV-0036.md"
+    },
+    {
+      "id": "ENV-0037",
+      "title": "第三方批量生图上游成功而本地结果未知（待定位）",
+      "category": "network",
+      "platforms": [
+        "unknown"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "图片结果尚未确认",
+        "批量15张",
+        "第三方API",
+        "响应中断"
+      ],
+      "status": "reported",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0037.json",
+      "document": "docs/cases/ENV-0037.md"
+    },
+    {
+      "id": "ENV-0038",
+      "title": "Windows 图片二次处理出现空指针 panic（待复现）",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "panic",
+        "nil pointer",
+        "图片编辑",
+        "二次处理"
+      ],
+      "status": "reported",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0038.json",
+      "document": "docs/cases/ENV-0038.md"
+    },
+    {
+      "id": "ENV-0039",
+      "title": "更新下载完成后准备阶段超时（具体瓶颈待定位）",
+      "category": "installer",
+      "platforms": [
+        "unknown"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "准备超时",
+        "update.log",
+        "解压",
+        "更新失败排查"
+      ],
+      "status": "reported",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0039.json",
+      "document": "docs/cases/ENV-0039.md"
+    },
+    {
+      "id": "ENV-0040",
+      "title": "更新准备重复解压并刷盘使低速磁盘等待放大",
+      "category": "installer",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "重复解压",
+        "Sync",
+        "小文件",
+        "低速磁盘",
+        "准备进度"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0040.json",
+      "document": "docs/cases/ENV-0040.md"
+    },
+    {
+      "id": "ENV-0041",
+      "title": "模型目录很大时重复线性查找造成选择框长时间阻塞",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "10000模型",
+        "大目录",
+        "平方级扫描",
+        "Select",
+        "卡顿"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0041.json",
+      "document": "docs/cases/ENV-0041.md"
+    },
+    {
+      "id": "ENV-0042",
+      "title": "原生 WebView 的本地模型中转预检缺少允许请求头",
+      "category": "network",
+      "platforms": [
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "CORS",
+        "WebView",
+        "AI识图",
+        "原生端",
+        "预检"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0042.json",
+      "document": "docs/cases/ENV-0042.md"
+    },
+    {
+      "id": "ENV-0043",
+      "title": "macOS WKWebView 默认禁止元素全屏导致视频无法全屏",
+      "category": "runtime",
+      "platforms": [
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "WKWebView",
+        "FullscreenEnabled",
+        "全屏",
+        "Wails"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0043.json",
+      "document": "docs/cases/ENV-0043.md"
+    },
+    {
+      "id": "ENV-0044",
+      "title": "慢速生成结果下载超过总期限且无续传导致画布迟迟没有成品",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "90秒",
+        "unexpected EOF",
+        "生成结果",
+        "Range",
+        "交付"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0044.json",
+      "document": "docs/cases/ENV-0044.md"
+    },
+    {
+      "id": "ENV-0045",
+      "title": "视频结果地址过期或线路停滞时没有恢复同一任务的可达来源",
+      "category": "network",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "签名URL",
+        "403",
+        "COS",
+        "直链",
+        "原任务恢复"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0045.json",
+      "document": "docs/cases/ENV-0045.md"
+    },
+    {
+      "id": "ENV-0046",
+      "title": "同一进程并发首次安装深度组件共写下载缓存",
+      "category": "installer",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "首次安装",
+        "并发下载",
+        "installationSlot",
+        "共享缓存"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0046.json",
+      "document": "docs/cases/ENV-0046.md"
+    },
+    {
+      "id": "ENV-0047",
+      "title": "PowerShell 5.1 读取无 BOM 中文脚本时出现编码解析故障",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "Windows PowerShell",
+        "BeefTV 深度组件构建"
+      ],
+      "keywords": [
+        "PowerShell 5.1",
+        "UTF-8 BOM",
+        "脚本编码",
+        "中文"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0047.json",
+      "document": "docs/cases/ENV-0047.md"
+    },
+    {
+      "id": "ENV-0048",
+      "title": "低帧率视频使用整帧时长容差会放宽输入秒数上限",
+      "category": "media",
+      "platforms": [
+        "windows",
+        "macos"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "低帧率",
+        "fps",
+        "时长容差",
+        "100ms",
+        "输入校验"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0048.json",
+      "document": "docs/cases/ENV-0048.md"
+    },
+    {
+      "id": "ENV-0049",
+      "title": "独立工作区未安装 Node 宿主依赖使 Go 集成测试报模块缺失",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "Node.js",
+        "BeefTV 宿主集成测试"
+      ],
+      "keywords": [
+        "ERR_MODULE_NOT_FOUND",
+        "node_modules",
+        "worktree",
+        "Go集成测试",
+        "pi SDK"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0049.json",
+      "document": "docs/cases/ENV-0049.md"
+    },
+    {
+      "id": "ENV-0050",
+      "title": "有效 MP4 以 octet-stream 返回时被媒体类型判断拒绝",
+      "category": "media",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "application/octet-stream",
+        "MP4",
+        "ftyp",
+        "MIME",
+        "内容识别"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0050.json",
+      "document": "docs/cases/ENV-0050.md"
+    },
+    {
+      "id": "ENV-0051",
+      "title": "多视频画布平移触发无效重渲染和模糊合成开销",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "多视频",
+        "拖动卡顿",
+        "React.memo",
+        "backdrop-filter",
+        "渲染负载"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0051.json",
+      "document": "docs/cases/ENV-0051.md"
+    },
+    {
+      "id": "ENV-0052",
+      "title": "桌面重启换端口后常驻 MCP 进程继续使用旧地址",
+      "category": "runtime",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "MCP",
+        "WorkBuddy",
+        "DSH",
+        "runtime.json",
+        "随机端口",
+        "重连"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0052.json",
+      "document": "docs/cases/ENV-0052.md"
+    },
+    {
+      "id": "ENV-0053",
+      "title": "Seedance 调用报告 HTTP 415，具体拒绝环节待核对",
+      "category": "network",
+      "platforms": [
+        "unknown"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "HTTP 415",
+        "Seedance",
+        "Content-Type",
+        "第三方中转",
+        "请求协议"
+      ],
+      "status": "reported",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0053.json",
+      "document": "docs/cases/ENV-0053.md"
     }
   ]
 }

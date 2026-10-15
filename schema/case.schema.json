@@ -34,7 +34,8 @@
         "enum": [
           "windows",
           "macos",
-          "linux"
+          "linux",
+          "unknown"
         ]
       }
     },

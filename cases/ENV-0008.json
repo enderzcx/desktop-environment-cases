@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0008",
+  "title": "本地凭据文件读取或解密失败被误报为模型参数错误",
+  "category": "storage",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "credential",
+    "密钥文件",
+    "权限",
+    "解密",
+    "本地凭据"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "本地算力或连接凭据不可用，却提示“模型不接受当前参数”。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "本地算力或连接凭据不可用，却提示“模型不接受当前参数”。"
+  ],
+  "environment": [
+    "本地凭据文件缺失、无权限、格式损坏或解密失败；不同系统的具体文件访问错误可能不同。"
+  ],
+  "cause": {
+    "summary": "本地读取错误被包装成 HTTP 400，前端按模型参数失败处理，丢失真实来源和阶段。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "读取结构化 reason、失败阶段和请求 ID，确认是否在发送上游之前失败。",
+      "区分文件不存在、访问拒绝、格式错误与解密失败；不要求提交原始凭据内容。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "保留本地凭据错误类型并提供对应恢复指引，禁止将此类错误自动重发为付费生成。",
+      "steps": [
+        "保留本地凭据错误类型并提供对应恢复指引，禁止将此类错误自动重发为付费生成。"
+      ],
+      "verification": [
+        "四种本地错误均保留正确类别，诊断含安全摘要；上游参数错误仍归上游。"
+      ],
+      "risks": [
+        "不得删除密钥、重置加密配置或记录凭据正文；缺失文件和密钥不匹配应分别处理。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #157 对机制和处理的记录：本地读取错误被包装成 HTTP 400，前端按模型参数失败处理，丢失真实来源和阶段。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/157"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 c596a342244ceeb674633b6a9bf974ef860310f6：backend/internal/app/managed_credential.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/c596a342244ceeb674633b6a9bf974ef860310f6/backend/internal/app/managed_credential.go"
+    }
+  ],
+  "limitations": [
+    "历史专项验证不能代替客户具体文件权限、密钥状态和所有平台错误码的现场检查。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0041",
+  "title": "模型目录很大时重复线性查找造成选择框长时间阻塞",
+  "category": "runtime",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "10000模型",
+    "大目录",
+    "平方级扫描",
+    "Select",
+    "卡顿"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "模型很多时设置页面和默认模型选项生成卡顿。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "模型很多时设置页面和默认模型选项生成卡顿。"
+  ],
+  "environment": [
+    "大量渠道/模型配置，例如历史 1 万模型单渠道测试；实际性能取决于设备与数据形状。"
+  ],
+  "cause": {
+    "summary": "生成每个选项时重复扫描模型或渠道，叠加成平方级工作；虚拟列表只减少渲染行数，不能消除前置计算。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "统计脱敏模型/渠道数量和选项构造耗时，分别测 CPU 计算与 DOM 渲染。",
+      "不要把所有下拉打不开都归为数量大；先排除 reduced-motion 离屏及浮层遮挡。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "按配置数组/渠道对象建立一次索引，复用查找，保持选项和顺序不变。",
+      "steps": [
+        "按配置数组/渠道对象建立一次索引，复用查找，保持选项和顺序不变。"
+      ],
+      "verification": [
+        "使用同一大目录比对选项内容和耗时，真实点击及选择仍正常。"
+      ],
+      "risks": [
+        "不能只加虚拟滚动就宣称计算已优化；缓存必须在配置变化时失效。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #127 对机制和处理的记录：生成每个选项时重复扫描模型或渠道，叠加成平方级工作；虚拟列表只减少渲染行数，不能消除前置计算。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/127"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 63ccdb630cb929a762eb21c1faa8e1154b914c22：web/src/lib/model-selection.ts",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/63ccdb630cb929a762eb21c1faa8e1154b914c22/web/src/lib/model-selection.ts"
+    }
+  ],
+  "limitations": [
+    "大目录是已确认的性能机制，不证明原始某位用户无法打开菜单就是此原因。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

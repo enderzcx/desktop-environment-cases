@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0039",
+  "title": "更新下载完成后准备阶段超时（具体瓶颈待定位）",
+  "category": "installer",
+  "platforms": [
+    "unknown"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "准备超时",
+    "update.log",
+    "解压",
+    "更新失败排查"
+  ],
+  "status": "reported",
+  "updated_at": "2026-10-15",
+  "summary": "更新包下载结束后长时间准备，最后失败，重复点击也无法明确原因。 当前保留为待定位报告。",
+  "symptoms": [
+    "更新包下载结束后长时间准备，最后失败，重复点击也无法明确原因。"
+  ],
+  "environment": [
+    "历史桌面更新反馈；原机器系统、磁盘、锁持有者及具体超时阶段未完整确定。"
+  ],
+  "cause": {
+    "summary": "未确定。校验、保存、解压、逐文件刷盘和安装准备都可能耗时，现有记录不足以指定唯一原因。",
+    "confidence": "unknown",
+    "evidence_ids": [
+      "E1"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "导出覆盖失败时间的更新阶段、耗时、计数、代理使用状态和错误类别。",
+      "区分保存等待超时和本地准备期限，查看失败进度，不把日志缺失当作没有故障。"
+    ],
+    "exclusions": [
+      "当前证据不足以排除其他根因；不得仅按相似错误提示认定环境问题。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "diagnostic",
+      "description": "使用阶段诊断定位后再选择处理；保留已签名下载包和原工作区，按实际阶段重试。",
+      "steps": [
+        "导出覆盖失败时间的更新阶段、耗时、计数、代理使用状态和错误类别。",
+        "区分保存等待超时和本地准备期限，查看失败进度，不把日志缺失当作没有故障。"
+      ],
+      "verification": [
+        "有新日志后确认具体阶段并复测原机器；诊断入口或文案改善不算原超时根治。"
+      ],
+      "risks": [
+        "不能跳过哈希、完整布局、保存保护或扩大到无期限重试来隐藏超时。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "customer_report",
+      "summary": "历史 PR #158 记录的未定位反馈：更新包下载结束后长时间准备，最后失败，重复点击也无法明确原因。",
+      "scope": "PR 明确保留客户根因未确定；诊断能力改进不证明原超时已修复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/158"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 529b9bb2770fff1fffd18bc5a7cd3c2797174527：docs/review-evidence/update-diagnostics/README.md",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/529b9bb2770fff1fffd18bc5a7cd3c2797174527/docs/review-evidence/update-diagnostics/README.md"
+    }
+  ],
+  "limitations": [
+    "PR #158 明确只补排查信息，不宣称修复未复现的客户超时。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0030",
+  "title": "浅色 Windows 系统主题让深色桌面应用出现白色标题栏",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "Wails",
+    "Windows主题",
+    "标题栏",
+    "Dark"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "深色画布窗口顶部显示亮白色原生标题栏。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "深色画布窗口顶部显示亮白色原生标题栏。"
+  ],
+  "environment": [
+    "Windows 10/11 浅色系统主题，Wails 桌面启动未明确配置原生窗口配色。"
+  ],
+  "cause": {
+    "summary": "网页主题没有自动约束原生窗口装饰，缺少 Windows Theme/CustomTheme 设置。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "分别检查网页内容、原生标题栏和启动底色，不只看 CSS 主题。",
+      "在浅色系统主题观察激活/失活窗口及首次启动闪白。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在桌面选项显式设置 Windows 深色原生主题、标题文字/边框和启动底色。",
+      "steps": [
+        "在桌面选项显式设置 Windows 深色原生主题、标题文字/边框和启动底色。"
+      ],
+      "verification": [
+        "浅色系统下窗口标题栏仍与应用深色界面一致；失活和重新聚焦状态可读。"
+      ],
+      "risks": [
+        "不修改用户全局系统主题；网页截图和 options 单测不能替代真实原生窗口观察。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #153 对机制和处理的记录：网页主题没有自动约束原生窗口装饰，缺少 Windows Theme/CustomTheme 设置。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/153"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 4b9090e05a41a4d26d787243a09ed09cd8f12066：backend/cmd/desktop/main.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/4b9090e05a41a4d26d787243a09ed09cd8f12066/backend/cmd/desktop/main.go"
+    }
+  ],
+  "limitations": [
+    "历史单测证明选项设置，原生系统视觉验收仍应绑定具体安装包和系统。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

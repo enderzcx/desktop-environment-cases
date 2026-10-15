@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0007",
+  "title": "迁移或重启后数据目录发现错误导致工作区看似丢失",
+  "category": "storage",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "数据目录",
+    "空工作区",
+    "移动磁盘",
+    "重启",
+    "模型配置"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "迁移、升级或重开后看似没有项目，或模型配置未恢复。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "迁移、升级或重开后看似没有项目，或模型配置未恢复。"
+  ],
+  "environment": [
+    "历史 Windows 路径发现、进程锁、配置备份或更新重启参数未完整保留；也包含用户选择的数据磁盘暂时不可访问。"
+  ],
+  "cause": {
+    "summary": "数据目录指针与实际工作区位置、重启参数或配置备份不一致，会打开错误位置；所选磁盘缺失时静默新建目录会掩盖原数据。历史客户唯一根因仍未知。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "只读核对已选存储位置、重启参数、数据库及配置标识，先寻找原工作区。",
+      "确认数据磁盘是否在线，检查是否有另一实例持有工作区锁；不得直接初始化新库覆盖。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在系统配置位置保存稳定目录指针，迁移校验成功后切换，重启/更新保留目录参数，磁盘缺失明确报错。",
+      "steps": [
+        "在系统配置位置保存稳定目录指针，迁移校验成功后切换，重启/更新保留目录参数，磁盘缺失明确报错。"
+      ],
+      "verification": [
+        "迁移前后项目、任务和素材 ID 与加密配置可读；正常重开及升级重启仍指向同一工作区。"
+      ],
+      "risks": [
+        "先保留旧目录和配置密钥；不要用新建空工作区或删除配置解决“看似丢失”。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #116 对机制和处理的记录：数据目录指针与实际工作区位置、重启参数或配置备份不一致，会打开错误位置；所选磁盘缺失时静默新建目录会掩盖原数据。历史客户唯一根因仍未知。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/116"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 a9b81d5810cf8c7d7419fb306c80c93a4a340ad9：backend/internal/desktopstorage/location.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/a9b81d5810cf8c7d7419fb306c80c93a4a340ad9/backend/internal/desktopstorage/location.go"
+    }
+  ],
+  "limitations": [
+    "确认的是已修复的路径与恢复风险，不证明原始 Windows 丢数据报告只有这个原因。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

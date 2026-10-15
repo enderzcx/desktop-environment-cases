@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0026",
+  "title": "旧预览数据库迁移编号冲突导致正式版缺列",
+  "category": "storage",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "SQLite",
+    "migration",
+    "failure_diagnostics",
+    "旧数据库",
+    "缺列"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "连纯文字任务都在提交上游前失败，可能误报模型参数不接受。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "连纯文字任务都在提交上游前失败，可能误报模型参数不接受。"
+  ],
+  "environment": [
+    "预览版曾用相同迁移编号代表不同结构，正式版读到迁移编号已完成。"
+  ],
+  "cause": {
+    "summary": "只信任迁移版本号会跳过实际缺少的 tasks.failure_diagnostics 列；不是模型服务拒绝。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "先确认未向上游提交，再只读检查真实表结构与迁移记录。",
+      "在备份副本上使用历史结构回归，不直接以删除数据库验证。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "按实际 schema 幂等补齐明确缺失的附加列，保留原业务数据和历史迁移记录。",
+      "steps": [
+        "按实际 schema 幂等补齐明确缺失的附加列，保留原业务数据和历史迁移记录。"
+      ],
+      "verification": [
+        "重复启动不重复破坏结构；历史项目、任务和配置保留，新增任务可持久化。"
+      ],
+      "risks": [
+        "不得删除旧库、重置迁移表或执行无备份的破坏性迁移来消除报错。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #55 对机制和处理的记录：只信任迁移版本号会跳过实际缺少的 tasks.failure_diagnostics 列；不是模型服务拒绝。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/55"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 b20db9be2195ab2b8dd37272f0c245f003486f4f：backend/internal/database/local_schema.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/b20db9be2195ab2b8dd37272f0c245f003486f4f/backend/internal/database/local_schema.go"
+    }
+  ],
+  "limitations": [
+    "本轮核对历史修复，不将历史原生付费矩阵当成本轮执行，也不覆盖任意损坏数据库。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

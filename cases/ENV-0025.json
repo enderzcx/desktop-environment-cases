@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0025",
+  "title": "SQLite 本地时区时间与 UTC 字符串比较使诊断包漏采",
+  "category": "runtime",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "SQLite",
+    "UTC",
+    "时区",
+    "julianday",
+    "空诊断包"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "实际有失败任务，按时间导出的诊断包却显示没有相关记录。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "实际有失败任务，按时间导出的诊断包却显示没有相关记录。"
+  ],
+  "environment": [
+    "SQLite 时间文本带写入方本地偏移，导出查询窗口使用 UTC；跨时区文本表示不同。"
+  ],
+  "cause": {
+    "summary": "直接按时间字符串比较没有比较真实时刻；只按创建时间也漏掉早先创建、窗口内仍更新的任务。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "以同一瞬间的不同偏移写入合成数据，对比字符串条件与 julianday 条件。",
+      "检查任务创建和更新时间是否落在窗口，而不是凭空扩大窗口。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "按真实时刻比较，并纳入窗口内仍有更新的任务、日志及 API 记录。",
+      "steps": [
+        "按真实时刻比较，并纳入窗口内仍有更新的任务、日志及 API 记录。"
+      ],
+      "verification": [
+        "本地时区写入、UTC 查询能取到同一任务；窗口外记录不被误采。"
+      ],
+      "risks": [
+        "不能修改操作系统时区或整库重写时间作为首选；不要扩大到无界日志导出。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #127 对机制和处理的记录：直接按时间字符串比较没有比较真实时刻；只按创建时间也漏掉早先创建、窗口内仍更新的任务。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/127"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 63ccdb630cb929a762eb21c1faa8e1154b914c22：backend/internal/repository/diagnostics.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/63ccdb630cb929a762eb21c1faa8e1154b914c22/backend/internal/repository/diagnostics.go"
+    }
+  ],
+  "limitations": [
+    "诊断包空还可能来自任务归属、日志缺失或查询条件，本案例只解释时间比较机制。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

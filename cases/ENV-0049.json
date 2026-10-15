@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0049",
+  "title": "独立工作区未安装 Node 宿主依赖使 Go 集成测试报模块缺失",
+  "category": "runtime",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "Node.js",
+    "BeefTV 宿主集成测试"
+  ],
+  "keywords": [
+    "ERR_MODULE_NOT_FOUND",
+    "node_modules",
+    "worktree",
+    "Go集成测试",
+    "pi SDK"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "Go 集成测试启动真实 Node 宿主失败，表面像后端回归，实际报告模块不存在。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "Go 集成测试启动真实 Node 宿主失败，表面像后端回归，实际报告模块不存在。"
+  ],
+  "environment": [
+    "新建或隔离的 checkout/worktree 没有被忽略的 agent-host/node_modules；测试会真实启动宿主。"
+  ],
+  "cause": {
+    "summary": "构建/测试前置依赖未在该工作区准备；主 checkout 安装过依赖不代表独立工作区继承。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "记录启动解释器、工作目录、实际模块解析路径和锁定 SDK，先区分依赖缺失与业务断言失败。",
+      "对照 CI 的宿主依赖安装步骤，在同样的 Node 版本准备后重跑原失败测试。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在对应工作区按锁文件安装宿主依赖并使用该版本 CI 验证的 Node，再运行原集成测试。",
+      "steps": [
+        "在对应工作区按锁文件安装宿主依赖并使用该版本 CI 验证的 Node，再运行原集成测试。"
+      ],
+      "verification": [
+        "原模块缺失消失且原业务断言通过；不能只把测试跳过或降低断言。"
+      ],
+      "risks": [
+        "不要用全局包或另一个 checkout 的目录掩盖缺失，也不因测试缺依赖改生产代码。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #156 对机制和处理的记录：构建/测试前置依赖未在该工作区准备；主 checkout 安装过依赖不代表独立工作区继承。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/156"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 8eece1799f0df4b7df1a5975a2e241530164b9b9：agent-host/package.json",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/8eece1799f0df4b7df1a5975a2e241530164b9b9/agent-host/package.json"
+    },
+    {
+      "id": "E3",
+      "type": "source_analysis",
+      "summary": "关联 PR #123：fix(generation): 生成结果 - 断点续传下载、等交付完成再绑定、停用整份画布 PUT",
+      "scope": "后续修复或相邻路径证据；不能将旧版本机制当作当前所有版本行为。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/123"
+    }
+  ],
+  "limitations": [
+    "这是开发/验证环境案例，不代表最终用户需要安装 Node 或 SDK；不把首次失败的全量命令重标为通过。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

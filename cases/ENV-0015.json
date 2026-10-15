@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0015",
+  "title": "构建目录已有媒体运行时但最终更新 ZIP 漏装",
+  "category": "installer",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "media-runtime",
+    "打包白名单",
+    "FFmpeg",
+    "最终归档"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "开发或构建目录能播放，用户安装最终包后找不到媒体工具。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "开发或构建目录能播放，用户安装最终包后找不到媒体工具。"
+  ],
+  "environment": [
+    "Windows 包增加 media-runtime，但专用归档器只收集原来的顶层目录。"
+  ],
+  "cause": {
+    "summary": "构建和归档白名单分离；工具进入构建目录不代表进入交付 ZIP。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "从实际发布 ZIP 解压检查 FFmpeg、LICENSE、README 和 manifest 为非空文件。",
+      "对比构建目录、最终归档和客户端实际工具解析位置，检查更新及回滚两条路径。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "将媒体运行时加入归档并对最终 ZIP 执行完整性断言，兼容真正没有该组件的历史包。",
+      "steps": [
+        "将媒体运行时加入归档并对最终 ZIP 执行完整性断言，兼容真正没有该组件的历史包。"
+      ],
+      "verification": [
+        "归档读回包含四个必要文件；缺许可证或缺组件拒绝发布，工具可在安装后执行。"
+      ],
+      "risks": [
+        "不要让另一个旧目录掩盖新目录缺损；不只检查构建日志或目录存在。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #106 对机制和处理的记录：构建和归档白名单分离；工具进入构建目录不代表进入交付 ZIP。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/106"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 958e5e3b4d1d2cbaffce6ea013bda61da3965847：backend/cmd/update-release/archive.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/958e5e3b4d1d2cbaffce6ea013bda61da3965847/backend/cmd/update-release/archive.go"
+    }
+  ],
+  "limitations": [
+    "最终包完整性检查不等于所有媒体格式在用户设备上可解码。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

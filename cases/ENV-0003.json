@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0003",
+  "title": "减少动态效果使模型菜单定位到视口外",
+  "category": "runtime",
+  "platforms": [
+    "unknown"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "reduced-motion",
+    "Select",
+    "菜单离屏",
+    "transitionend"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "默认模型下拉有选项但看不见或无法点击。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "默认模型下拉有选项但看不见或无法点击。"
+  ],
+  "environment": [
+    "已核对来源确认 prefers-reduced-motion: reduce 条件及浏览器回归；原报告系统和实际安装版本未由公开一手资料确定。回归覆盖明暗主题和窄视口。"
+  ],
+  "cause": {
+    "summary": "全局 1ms 过渡作用到 left/top 等位置属性，浮层同步测量读到过渡前坐标；曾复现横坐标约 -14240。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "读取实际 matchMedia 动效偏好，并测量对应菜单的视口矩形。",
+      "同时加载产品 CSS，实际打开菜单并点击选项；DOM 存在不足以证明可用。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "只把该菜单的过渡限定为 opacity、transform，保留其他控件需要的完成事件。",
+      "steps": [
+        "只把该菜单的过渡限定为 opacity、transform，保留其他控件需要的完成事件。"
+      ],
+      "verification": [
+        "普通/减少动态效果、明暗、桌面/窄屏下均须在视口内可选；关闭后遮罩和滚动锁释放。"
+      ],
+      "risks": [
+        "不要全局改成 0s；依赖 transitionend 的遮罩和浮层可能不收尾。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #137 对机制和处理的记录：全局 1ms 过渡作用到 left/top 等位置属性，浮层同步测量读到过渡前坐标；曾复现横坐标约 -14240。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/137"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 9c6ae08bf24368dab6b9e320ffc9272956164c01：web/src/styles/workspace-product.css",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/9c6ae08bf24368dab6b9e320ffc9272956164c01/web/src/styles/workspace-product.css"
+    }
+  ],
+  "limitations": [
+    "记录的是菜单定位根因，不解释独立的配置接口 500、文件写入或删除权限失败。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

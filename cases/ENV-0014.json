@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0014",
+  "title": "Windows 无法解码 HEVC 且缺少可用 FFmpeg 预览工具",
+  "category": "media",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "HEVC",
+    "H.265",
+    "H.264",
+    "FFmpeg",
+    "PATH"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "H.265 视频导入或预览失败，兼容播放又依赖用户系统上额外安装的 FFmpeg。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "H.265 视频导入或预览失败，兼容播放又依赖用户系统上额外安装的 FFmpeg。"
+  ],
+  "environment": [
+    "Windows WebView/系统解码能力不同；早期验证机器预装 FFmpeg，掩盖了普通安装环境缺少工具的问题。"
+  ],
+  "cause": {
+    "summary": "导入前过早依赖浏览器解码，失败不能形成可恢复节点；兼容转码工具又只依赖系统 PATH。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "使用隔离 PATH 的最终安装包检查自带工具解析，而非开发机 which ffmpeg。",
+      "区分原片可直接解码、可准备兼容副本和转码失败；核对原文件哈希。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "先安全导入原素材，原片解码失败时按需调用随包校验工具生成 H.264 预览；允许复用和重试。",
+      "steps": [
+        "先安全导入原素材，原片解码失败时按需调用随包校验工具生成 H.264 预览；允许复用和重试。"
+      ],
+      "verification": [
+        "无系统 FFmpeg 的 Windows 环境中随包工具能执行 HEVC→H.264；原片可播时不转码，原素材字节保持不变。"
+      ],
+      "risks": [
+        "不覆盖原片、不在启动时批量转码；控制并发和资源占用，发行方保留对应许可证材料。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #105 对机制和处理的记录：导入前过早依赖浏览器解码，失败不能形成可恢复节点；兼容转码工具又只依赖系统 PATH。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/105"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 c7dea3847fefb7bc9d1041877098e002f63218db：backend/internal/mediatools/ffmpeg.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/c7dea3847fefb7bc9d1041877098e002f63218db/backend/internal/mediatools/ffmpeg.go"
+    },
+    {
+      "id": "E3",
+      "type": "source_analysis",
+      "summary": "关联 PR #104：fix(desktop): 修复 Windows 连接与画布媒体、滚轮问题",
+      "scope": "相关版本或相邻路径证据；请核对差异，不能把同次支持过程的其他修复替代当前根因。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/104"
+    }
+  ],
+  "limitations": [
+    "某台机器原片能直接播放不能证明兼容副本路径通过；未覆盖全部编码组合。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

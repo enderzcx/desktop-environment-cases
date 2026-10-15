@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0027",
+  "title": "Windows 原生保存框改名后丢失媒体扩展名",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "SaveFileDialog",
+    "扩展名",
+    "All Files",
+    "MIME",
+    "文件关联"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "保存媒体时修改名称且不填后缀，结果文件无法按预期关联播放器。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "保存媒体时修改名称且不填后缀，结果文件无法按预期关联播放器。"
+  ],
+  "environment": [
+    "BeefTV v1.6.19 Windows 原生保存框仅显示 All Files。"
+  ],
+  "cause": {
+    "summary": "未为原生保存框设置正确格式过滤和默认扩展名；若下载完成后才改名，也会绕过原生覆盖确认。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "在保存框中输入无后缀新名称，检查最终文件名、真实格式和哈希。",
+      "覆盖 PNG、MP4、M4A、MOV 等 MIME，并保留取消及同名文件覆盖检查。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在用户确认保存前由原生格式设置补后缀，统一真实 MIME 映射。",
+      "steps": [
+        "在用户确认保存前由原生格式设置补后缀，统一真实 MIME 映射。"
+      ],
+      "verification": [
+        "无后缀改名后文件可完整解码；同名覆盖仍弹确认，取消后原文件不变。"
+      ],
+      "risks": [
+        "不要仅按字符串追加扩展名后覆盖文件，也不能只改后缀伪装转码。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #59 对机制和处理的记录：未为原生保存框设置正确格式过滤和默认扩展名；若下载完成后才改名，也会绕过原生覆盖确认。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/59"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 12f24f37411d7e98a4d8b2e91c7a8c29cb52fda8：backend/cmd/desktop/app.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/12f24f37411d7e98a4d8b2e91c7a8c29cb52fda8/backend/cmd/desktop/app.go"
+    }
+  ],
+  "limitations": [
+    "历史验收未重测 HideFileExt=1 和所有其他系统原生保存框。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}
