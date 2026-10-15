@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0002",
+  "title": "Git Bash 调用 Windows 安装器时斜杠参数可能被转换为路径",
+  "category": "installer",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "Windows 原生安装器"
+  ],
+  "keywords": [
+    "Git Bash",
+    "MSYS2",
+    "silent",
+    "install",
+    "路径转换",
+    "安装参数"
+  ],
+  "status": "reported",
+  "updated_at": "2026-10-15",
+  "summary": "客户侧工具报告，运行安装器时 /silent 被当作路径转换，导致参数错误；禁用本次参数转换后继续安装。通用机制有官方文档，但本次失败尚无独立 argv 捕获或 Windows 复现。",
+  "symptoms": [
+    "在 Git Bash 中调用 Windows 原生安装器时报告无效参数。",
+    "同一安装器在改变参数传递方式后可能成功。"
+  ],
+  "environment": [
+    "客户侧工具说明涉及 Git Bash 和 Windows WebView2 官方安装器。",
+    "Git for Windows/MSYS 具体版本、原始完整命令、进程实收参数和错误码未知。"
+  ],
+  "cause": {
+    "summary": "疑似 MSYS 参数路径自动转换把斜杠开头的安装器选项改成了 Windows 路径。安装包损坏、其他无效参数和权限问题尚未排除。",
+    "confidence": "suspected",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "先在隔离 Windows 环境用原生 argv 打印程序捕获接收到的 /silent 和 /install 参数，避免用真实安装器试探。",
+      "比较 Git Bash、PowerShell 和仅对本次命令排除参数转换时的 argv。",
+      "记录 shell 版本、安装器签名、实际退出码和错误文字，再决定是否属于此机制。"
+    ],
+    "exclusions": [
+      "“安装失败”或“无效参数”本身不足以证明参数转换。",
+      "当前记录没有 Windows 原生复现；官方机制与客户描述一致仍不能把案例升为 confirmed。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "diagnostic",
+      "description": "先验证参数传递，再选择原生 shell 或针对当前命令的转换排除。",
+      "steps": [
+        "优先由 PowerShell 或产品原生进程 API 传递安装器参数，避免不需要的 shell 转换。",
+        "如果确实需要 MSYS2，参考官方 MSYS2_ARG_CONV_EXCL 对 /silent;/install 参数前缀排除转换；只作用于该次命令。",
+        "在 argv 打印程序确认原样传递后，再由用户确认执行已验证签名的安装器。"
+      ],
+      "verification": [
+        "原生程序收到的参数必须逐项等于预期，不能只看 shell 打印的命令。",
+        "实际安装后读取运行时版本并重启目标应用，验证原故障是否消失。"
+      ],
+      "risks": [
+        "全局禁用转换可能破坏真正需要转换的文件路径。",
+        "Git Bash 与 MSYS2 的版本行为须实测，不把变量设置当作跨版本保证。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "customer_report",
+      "summary": "脱敏工具报告称 /silent 被转换为路径，关闭该次参数转换后安装继续。",
+      "scope": "客户侧工具报告；未取得完整 argv、错误码或维护者独立复现。",
+      "observed_at": "2026-10-15"
+    },
+    {
+      "id": "E2",
+      "type": "vendor_documentation",
+      "summary": "MSYS2 文档说明调用 Windows 原生程序时会自动转换看似 Unix 路径的参数，并提供 MSYS2_ARG_CONV_EXCL 前缀排除方式。",
+      "scope": "证明 MSYS2 通用机制；不独立证明具体 Git Bash 版本和本次客户故障。",
+      "observed_at": "2026-10-15",
+      "reference": "https://www.msys2.org/docs/filesystem-paths/"
+    }
+  ],
+  "limitations": [
+    "尚未在 Windows 捕获原生 argv 或复现客户的具体命令。",
+    "不提供自动安装命令；当前条目仅用于识别和继续诊断。",
+    "与 ENV-0001 属于同次支持过程的不同问题，不能合并其根因结论。"
+  ]
+}

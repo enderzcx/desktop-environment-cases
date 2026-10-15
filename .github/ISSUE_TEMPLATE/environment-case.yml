@@ -1,0 +1,47 @@
+name: 环境故障报告
+description: 提交可复用的桌面环境问题；不确定的信息可填未知。
+title: "[环境] "
+body:
+  - type: markdown
+    attributes:
+      value: 请只填写脱敏摘要。不要上传客户截图、原始诊断包、凭据、账号、机器路径、提示词或媒体文件。
+  - type: input
+    id: symptom
+    attributes:
+      label: 症状与影响
+      placeholder: 例如：应用能启动，但打开画布报 toSorted is not a function。
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 系统、架构、应用版本、运行时版本和相关网络/存储条件；未知项请写未知。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 操作、预期与实际结果
+      description: 写清已经做过的检查。未复现请明确说明。
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: 已尝试处理与结果
+      description: 区分临时恢复、产品源码修复和客户实际验证。
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 证据与来源
+      description: 官方文档、固定代码提交、公开 CI 链接或脱敏后的报告摘要。假设请注明。
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 提交前检查
+      options:
+        - label: 已移除个人信息、凭据、机器路径和原始客户材料。
+          required: true

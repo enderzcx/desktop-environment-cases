@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0000",
+  "title": "填写症状与具体触发条件",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "填写产品名称"
+  ],
+  "keywords": [
+    "填写错误关键词"
+  ],
+  "status": "reported",
+  "updated_at": "2026-10-15",
+  "summary": "填写脱敏事实摘要。",
+  "symptoms": [
+    "实际症状；未知写未知。"
+  ],
+  "environment": [
+    "系统、架构、应用和运行时版本；未知写未知。"
+  ],
+  "cause": {
+    "summary": "尚未确认。",
+    "confidence": "unknown",
+    "evidence_ids": []
+  },
+  "detection": {
+    "checks": [
+      "填写可执行的确认检查。"
+    ],
+    "exclusions": [
+      "填写不能据此判断的情况。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "diagnostic",
+      "description": "先收集证据。",
+      "steps": [
+        "填写最小必要检查。"
+      ],
+      "verification": [
+        "填写检查的预期结果。"
+      ],
+      "risks": [
+        "说明数据保护与操作风险。"
+      ],
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "customer_report",
+      "summary": "替换为有来源的脱敏报告摘要。",
+      "scope": "未经独立验证的报告。",
+      "observed_at": "2026-10-15"
+    }
+  ],
+  "limitations": [
+    "尚未独立确认根因。"
+  ]
+}

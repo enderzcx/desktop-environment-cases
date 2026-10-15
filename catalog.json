@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "ENV-0001",
+      "title": "旧 WebView 缺少 Array.toSorted 导致画布加载失败",
+      "category": "runtime",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "BeefTV"
+      ],
+      "keywords": [
+        "toSorted",
+        "WebView2",
+        "Wails",
+        "TypeError",
+        "画布",
+        "旧运行时"
+      ],
+      "status": "confirmed",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0001.json",
+      "document": "docs/cases/ENV-0001.md"
+    },
+    {
+      "id": "ENV-0002",
+      "title": "Git Bash 调用 Windows 安装器时斜杠参数可能被转换为路径",
+      "category": "installer",
+      "platforms": [
+        "windows"
+      ],
+      "products": [
+        "Windows 原生安装器"
+      ],
+      "keywords": [
+        "Git Bash",
+        "MSYS2",
+        "silent",
+        "install",
+        "路径转换",
+        "安装参数"
+      ],
+      "status": "reported",
+      "updated_at": "2026-10-15",
+      "record": "cases/ENV-0002.json",
+      "document": "docs/cases/ENV-0002.md"
+    }
+  ]
+}
