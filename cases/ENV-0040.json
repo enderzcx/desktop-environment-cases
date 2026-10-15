@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0040",
+  "title": "更新准备重复解压并刷盘使低速磁盘等待放大",
+  "category": "installer",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "重复解压",
+    "Sync",
+    "小文件",
+    "低速磁盘",
+    "准备进度"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "下载后和安装前两次长时间准备，旧界面仅转圈，无法看出进度。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "下载后和安装前两次长时间准备，旧界面仅转圈，无法看出进度。"
+  ],
+  "environment": [
+    "包含大量小文件的桌面更新 ZIP；逐文件 Sync 的磁盘耗时在较慢存储上更显著。"
+  ],
+  "cause": {
+    "summary": "下载阶段完整解压一次，安装阶段又做一次完整解压及刷盘，重复工作放大本地准备耗时。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "按阶段记录解压次数、文件数和耗时，区分网络时间、保存时间与磁盘处理。",
+      "保持刷盘和布局验证不变做受控比较，不能只比较视觉动画。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "下载后保留已验签 ZIP，安装前在目标卷安全解压一次并显示阶段进度，完成验证后才退出应用。",
+      "steps": [
+        "下载后保留已验签 ZIP，安装前在目标卷安全解压一次并显示阶段进度，完成验证后才退出应用。"
+      ],
+      "verification": [
+        "受控相同文件树只完整解压一次；取消/超时后不能迟到启动安装，未完成保存不得重叠重试。"
+      ],
+      "risks": [
+        "不能为了速度删除逐文件安全检查、Sync、保存保护和回滚。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #136 对机制和处理的记录：下载阶段完整解压一次，安装阶段又做一次完整解压及刷盘，重复工作放大本地准备耗时。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/136"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 5c37178faef342d34acc094e4fea4a64126749c9：backend/internal/desktopupdate/engine.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/5c37178faef342d34acc094e4fea4a64126749c9/backend/internal/desktopupdate/engine.go"
+    }
+  ],
+  "limitations": [
+    "历史性能测量是本机合成小文件测试，不代表用户总更新耗时；不等同于 ENV-0039 已定位。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

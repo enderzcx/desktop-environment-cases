@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0043",
+  "title": "macOS WKWebView 默认禁止元素全屏导致视频无法全屏",
+  "category": "runtime",
+  "platforms": [
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "WKWebView",
+    "FullscreenEnabled",
+    "全屏",
+    "Wails"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "视频能正常播放，但点击全屏无法进入原生元素全屏。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "视频能正常播放，但点击全屏无法进入原生元素全屏。"
+  ],
+  "environment": [
+    "macOS Wails 桌面壳使用 WKWebView；同一网页在普通浏览器的全屏能力不能代表壳内设置。"
+  ],
+  "cause": {
+    "summary": "Mac WebView preferences 未启用元素全屏，播放器按钮无法绕过原生壳的默认限制。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "核对实际桌面 mac.Preferences.FullscreenEnabled，而非只检查播放器按钮。",
+      "在用户手势下进入和退出全屏，区分浏览器权限、原生壳设置和播放器异常。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在桌面 Mac preferences 显式启用 FullscreenEnabled，并保留原生窗口生命周期。",
+      "steps": [
+        "在桌面 Mac preferences 显式启用 FullscreenEnabled，并保留原生窗口生命周期。"
+      ],
+      "verification": [
+        "原生客户端能通过视频按钮进入、退出全屏；历史 PR 记录负责人实际确认，网页测试不可替代。"
+      ],
+      "risks": [
+        "不以关闭 WebView 安全策略或改变系统全局设置解决全屏。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #133 对机制和处理的记录：Mac WebView preferences 未启用元素全屏，播放器按钮无法绕过原生壳的默认限制。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/133"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 eca4943fb555d363a5a00417f8e721f2d2c5f6de：backend/cmd/desktop/main.go",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/eca4943fb555d363a5a00417f8e721f2d2c5f6de/backend/cmd/desktop/main.go"
+    }
+  ],
+  "limitations": [
+    "历史原生确认只支持当时版本和机器；本轮未重新打开应用验证。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0042",
+  "title": "原生 WebView 的本地模型中转预检缺少允许请求头",
+  "category": "network",
+  "platforms": [
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "CORS",
+    "WebView",
+    "AI识图",
+    "原生端",
+    "预检"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "原生桌面导演台 AI 识图请求在跨源预检阶段失败。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "原生桌面导演台 AI 识图请求在跨源预检阶段失败。"
+  ],
+  "environment": [
+    "历史 macOS arm64 原生识图验收；回归覆盖 wails://wails 和 http://wails.localhost 两种桌面来源。"
+  ],
+  "cause": {
+    "summary": "桌面本地后端的 CORS 允许头列表没有覆盖自定义模型中转使用的请求头，wails://wails 或 http://wails.localhost 发出的预检被阻断。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "读取预检响应、Origin 和请求阶段，确认业务请求是否真正发出。",
+      "对照原生壳与网页发出的来源/请求头，保留凭据归属和后端渠道限制。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在已有桌面来源和凭据策略下补齐模型中转所需的精确允许请求头，让 OPTIONS 本地结束而不调用上游。",
+      "steps": [
+        "在已有桌面来源和凭据策略下补齐模型中转所需的精确允许请求头，让 OPTIONS 本地结束而不调用上游。"
+      ],
+      "verification": [
+        "两种桌面来源的 OPTIONS 返回正确允许头且不转发到上游，真实业务调用另做验收。"
+      ],
+      "risks": [
+        "不设置任意跨源放行、不暴露第三方密钥，也不能仅以 HTTP 入口健康证明识图可用。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #63 对机制和处理的记录：桌面本地后端的 CORS 允许头列表没有覆盖自定义模型中转使用的请求头，wails://wails 或 http://wails.localhost 发出的预检被阻断。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/63"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 bcc3b05afa9e4e2bf9e13b5eb04e047438cb677b：backend/internal/bootstrap/runtime_cors_test.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/bcc3b05afa9e4e2bf9e13b5eb04e047438cb677b/backend/internal/bootstrap/runtime_cors_test.go"
+    }
+  ],
+  "limitations": [
+    "历史验收记录列出已修复该阻断，但本轮不重跑付费识图，具体跨源请求必须按当前版本核查。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

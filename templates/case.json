@@ -4,7 +4,7 @@
   "title": "填写症状与具体触发条件",
   "category": "runtime",
   "platforms": [
-    "windows"
+    "unknown"
   ],
   "products": [
     "填写产品名称"

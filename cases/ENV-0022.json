@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0022",
+  "title": "成功升级后的暂存目录长期累积占用磁盘",
+  "category": "installer",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    ".beeftv-update",
+    "缓存清理",
+    "回滚",
+    "磁盘"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "多次成功升级后安装位置残留多组大体积更新目录。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "多次成功升级后安装位置残留多组大体积更新目录。"
+  ],
+  "environment": [
+    "桌面更新产生暂存/备份目录；不同平台历史锁行为不同。"
+  ],
+  "cause": {
+    "summary": "旧清理时机与健康确认不足，完成升级的目录持续保留；盲删又会损伤失败恢复材料。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "识别更新记录状态、当前安装位置和程序是否健康，区分完成、失败、回滚和仍在使用的目录。",
+      "统计可回收体积，不把所有类似命名目录视为垃圾。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "界面、缓存与工作区/素材/画布读取健康后，仅清理同一安装位置的已完成记录；保留失败和回滚材料。",
+      "steps": [
+        "界面、缓存与工作区/素材/画布读取健康后，仅清理同一安装位置的已完成记录；保留失败和回滚材料。"
+      ],
+      "verification": [
+        "成功升级残留被清理；失败/不完整记录保留；Windows 释放锁、macOS 旧 helper 兼容锁仍满足互斥。"
+      ],
+      "risks": [
+        "不能只按目录前缀递归删除，不能在健康确认前清除回滚副本。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #69 对机制和处理的记录：旧清理时机与健康确认不足，完成升级的目录持续保留；盲删又会损伤失败恢复材料。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/69"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 1a4624c99d4fb5bae00766d4597558c7202b6922：docs/release-evidence/v1.7.2-targeted.md",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/1a4624c99d4fb5bae00766d4597558c7202b6922/docs/release-evidence/v1.7.2-targeted.md"
+    }
+  ],
+  "limitations": [
+    "历史 Mac 候选做过原生数据读回；其他版本/平台需检查具体锁协议。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

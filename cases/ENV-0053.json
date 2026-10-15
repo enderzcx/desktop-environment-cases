@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0053",
+  "title": "Seedance 调用报告 HTTP 415，具体拒绝环节待核对",
+  "category": "network",
+  "platforms": ["unknown"],
+  "products": ["BeefTV"],
+  "keywords": ["HTTP 415", "Seedance", "Content-Type", "第三方中转", "请求协议"],
+  "status": "reported",
+  "updated_at": "2026-10-15",
+  "summary": "历史反馈盘点记录 Seedance 调用出现 HTTP 415；原始 HTTP 响应、实际渠道和协议未在该材料中完整保存，不能认定为本地网络或某个已修复协议问题。",
+  "symptoms": ["调用 Seedance 时显示 HTTP 415，并伴有笼统的连接失败提示。"],
+  "environment": ["历史群反馈盘点第 8 项；客户端版本、系统、实际请求 MIME、渠道协议和拒绝方未独立核对。"],
+  "cause": {
+    "summary": "未知。需要区分请求内容类型、协议路径、素材上传、第三方转发及上游错误；相邻协议修复不能证明此条现场已恢复。",
+    "confidence": "unknown",
+    "evidence_ids": ["E1"]
+  },
+  "detection": {
+    "checks": ["收集脱敏请求 ID、HTTP 状态、失败阶段、声明 MIME 和所选协议，不收集请求正文或凭据。", "确认 415 由本地后端、第三方中转还是最终上游返回，再对照对应协议合同。"],
+    "exclusions": ["不能仅凭 415 或连接失败提示判断本机缺组件，也不能自动更换协议重发付费创建。"]
+  },
+  "remediations": [{
+    "kind": "diagnostic",
+    "description": "先确认拒绝方和具体协议，再修正已证实不匹配的请求配置。",
+    "steps": ["保留原任务与失败证据，将请求头/协议摘要与正确接口的要求逐项核对。"],
+    "verification": ["仅在相同失败路径得到匹配的请求与响应证据后确认根因；如需真实生成，另外取得相应调用授权。"],
+    "risks": ["不要反复试投不同协议、复制密钥到报告，或把上游明确拒绝当作可自动重试的网络中断。"],
+    "evidence_ids": ["E1", "E2"]
+  }],
+  "evidence": [{
+    "id": "E1",
+    "type": "customer_report",
+    "summary": "本轮读取既有 18 项群反馈盘点的第 8 项，收录脱敏症状。盘点表曾关联到协议修复，但没有可对应的原始请求证据。",
+    "scope": "二手汇总报告，仅支持发生过该症状的陈述；没有直接验证客户根因或恢复。原始含身份信息的材料未入库。",
+    "observed_at": "2026-10-15"
+  }, {
+    "id": "E2",
+    "type": "source_analysis",
+    "summary": "PR #144 包含图片/视频协议与音频上传等适配修复，是可核对的相关实现来源。",
+    "scope": "相关修复并不构成本条客户 HTTP 415 的直接根因或验收证据。",
+    "observed_at": "2026-10-15",
+    "reference": "https://github.com/glanderness/BeefTV/pull/144"
+  }],
+  "limitations": ["原盘点中的“已修复”结论没有被继承；待取得原请求或稳定复现后再决定状态。", "本轮只补录历史知识，未访问客户账户、调用模型或执行系统修复。"]
+}

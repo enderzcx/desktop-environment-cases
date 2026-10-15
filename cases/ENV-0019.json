@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0019",
+  "title": "AppData 影子文件与运行时发现路径冲突（MSIX 待实测）",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "MSIX",
+    "AppData",
+    "runtime descriptor",
+    "旧端口"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "MCP/CLI 读取到过期工作区端口或运行时，应用本身却正在运行。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "MCP/CLI 读取到过期工作区端口或运行时，应用本身却正在运行。"
+  ],
+  "environment": [
+    "MSIX 宿主可能优先看到 AppData 中的虚拟化副本，绝对路径不保证读取共享的最新文件。"
+  ],
+  "cause": {
+    "summary": "旧发现逻辑信任位于 AppData、可被 MSIX 虚拟化的描述文件路径。代码与夹具确认新发现位置不再回退到影子副本；真实 MSIX 客户端未测，未证明客户现场实际发生过虚拟化遮蔽。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "核对描述文件的工作区标识、进程存活、端口和实际读取位置。",
+      "比较普通宿主与 MSIX 客户端；不能仅检查写入方文件内容。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "在 AppData 之外使用按工作区哈希隔离的唯一发现位置，拒绝旧位置回退和身份不匹配。",
+      "steps": [
+        "在 AppData 之外使用按工作区哈希隔离的唯一发现位置，拒绝旧位置回退和身份不匹配。"
+      ],
+      "verification": [
+        "工作区重启后读取新描述文件，过期进程/错误身份明确失败；真实 MSIX 客户端仍需单独测。"
+      ],
+      "risks": [
+        "不搬动数据库或素材，不猜测默认端口，不用旧副本兜底连接。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史 PR #70 将发现位置移出 AppData，并以夹具检查影子文件与旧路径不会被新发现流程采纳；保留真实 MSIX 客户端未实测的限制。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/70"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 6be3a1323f2a90390aeeab42cf1bebfff94bcee5：backend/internal/runtimeinfo/path_windows.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/6be3a1323f2a90390aeeab42cf1bebfff94bcee5/backend/internal/runtimeinfo/path_windows.go"
+    }
+  ],
+  "limitations": [
+    "历史修复有源码和原生检查，但明确未完成真实 MSIX 客户端验收。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

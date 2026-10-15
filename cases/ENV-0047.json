@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0047",
+  "title": "PowerShell 5.1 读取无 BOM 中文脚本时出现编码解析故障",
+  "category": "runtime",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "Windows PowerShell",
+    "BeefTV 深度组件构建"
+  ],
+  "keywords": [
+    "PowerShell 5.1",
+    "UTF-8 BOM",
+    "脚本编码",
+    "中文"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "同一包含中文的构建脚本在新环境可读，在 Windows PowerShell 5.1 下文本或解析异常。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "同一包含中文的构建脚本在新环境可读，在 Windows PowerShell 5.1 下文本或解析异常。"
+  ],
+  "environment": [
+    "PowerShell 5.1 对无 BOM 文件的默认编码与 UTF-8 脚本内容不同。"
+  ],
+  "cause": {
+    "summary": "脚本没有明确的 UTF-8 BOM，历史深度组件发布前修复该编码兼容问题。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "检查实际脚本字节和解释器版本，不能只看编辑器显示。",
+      "在 PowerShell 5.1 原生读取并运行无副作用自检，区分脚本解析与被调工具的退出错误。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "以兼容 PowerShell 5.1 的 UTF-8 BOM 保存相应脚本，并在指定解释器验证。",
+      "steps": [
+        "以兼容 PowerShell 5.1 的 UTF-8 BOM 保存相应脚本，并在指定解释器验证。"
+      ],
+      "verification": [
+        "中文字符串和脚本语法在目标解释器正确；真实工具失败仍保留非零退出码。"
+      ],
+      "risks": [
+        "ENV-0005 是 NSIS 编译器输入编码，本例是 PowerShell 源脚本解码，修复入口不同。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #44 对机制和处理的记录：脚本没有明确的 UTF-8 BOM，历史深度组件发布前修复该编码兼容问题。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/44"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 09e9e549bf3bb9fb9ba7ea12bc5febf342c78ca1：scripts/build-depth-runtime-windows.ps1",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/09e9e549bf3bb9fb9ba7ea12bc5febf342c78ca1/scripts/build-depth-runtime-windows.ps1"
+    }
+  ],
+  "limitations": [
+    "历史 PR 记录并修复脚本编码，但本轮没有重新运行 Windows PowerShell。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

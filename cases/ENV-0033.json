@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0033",
+  "title": "发布机 Bun 版本不支持已提交锁文件格式",
+  "category": "runtime",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "Bun",
+    "BeefTV 发布工具链"
+  ],
+  "keywords": [
+    "Bun",
+    "lockfileVersion",
+    "1.3.9",
+    "1.4.2",
+    "构建环境"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "依赖已锁定，发布时 Agent 打包合同仍无法通过。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "依赖已锁定，发布时 Agent 打包合同仍无法通过。"
+  ],
+  "environment": [
+    "历史 Agent 锁文件使用 lockfileVersion 2，发布工作流仍固定 Bun 1.3.9。"
+  ],
+  "cause": {
+    "summary": "构建工具版本与生成/验证锁文件的环境不一致，旧工具不能读取该格式。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "核对具体工作目录的锁文件版本、生成工具和发布步骤实际 Bun 版本。",
+      "不要把 web 与 agent-host 的工具链混为一谈。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "只把涉及该锁文件的发布步骤对齐到已原生验证的 Bun 1.4.2，保留依赖和运行时版本。",
+      "steps": [
+        "只把涉及该锁文件的发布步骤对齐到已原生验证的 Bun 1.4.2，保留依赖和运行时版本。"
+      ],
+      "verification": [
+        "冻结依赖安装及最终打包合同通过；各平台仍需独立构建与产物读回。"
+      ],
+      "risks": [
+        "不为通过检查而重写锁文件、放弃 frozen 安装或无关升级全部依赖。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #66 对机制和处理的记录：构建工具版本与生成/验证锁文件的环境不一致，旧工具不能读取该格式。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/66"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 06e7680167d884e24b6a31f5d6b3bec63fa92f88：.github/workflows/release-desktop.yml",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/06e7680167d884e24b6a31f5d6b3bec63fa92f88/.github/workflows/release-desktop.yml"
+    }
+  ],
+  "limitations": [
+    "是历史 v1.6.23 构建配置故障，不声称当前所有目录必须统一同一 Bun 版本。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

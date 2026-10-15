@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0052",
+  "title": "桌面重启换端口后常驻 MCP 进程继续使用旧地址",
+  "category": "runtime",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "MCP",
+    "WorkBuddy",
+    "DSH",
+    "runtime.json",
+    "随机端口",
+    "重连"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "桌面应用重启后 MCP 仍连接旧端口，后续工具调用持续失败。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "桌面应用重启后 MCP 仍连接旧端口，后续工具调用持续失败。"
+  ],
+  "environment": [
+    "桌面本地后端使用动态端口，外部 MCP 会话比一次桌面进程存活更久；显式固定地址是不同配置。"
+  ],
+  "cause": {
+    "summary": "CLI/MCP 仅启动时发现工作区地址，后续调用缓存了过期地址；工作区离线时也可能保留旧地址。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "对照工作区当前描述文件、进程存活和 MCP 使用的地址，不记录真实连接凭据。",
+      "用本地测试服务换端口，验证下一次调用能发现新地址，描述失效时不会继续沿用旧地址。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "动态模式在每次调用前重新发现并验证运行时，失效即清除旧地址；固定配置不自动切换，不重放写请求。",
+      "steps": [
+        "动态模式在每次调用前重新发现并验证运行时，失效即清除旧地址；固定配置不自动切换，不重放写请求。"
+      ],
+      "verification": [
+        "桌面重启换端口后新的工具调用正常；工作区离线明确失败；已经发送且结果未知的写操作不被自动重发。"
+      ],
+      "risks": [
+        "已关闭 PR #87 曾提出失败后重试，包括写请求；不能把该早期草案当作 #115 最终行为。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #115 对机制和处理的记录：CLI/MCP 仅启动时发现工作区地址，后续调用缓存了过期地址；工作区离线时也可能保留旧地址。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/115"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 8c015a57eeb2dca05b561a0b0b1349382bce24cc：backend/cmd/beeftv/main.go",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/8c015a57eeb2dca05b561a0b0b1349382bce24cc/backend/cmd/beeftv/main.go"
+    }
+  ],
+  "limitations": [
+    "历史回归与合并代码可确认发现机制，原 WorkBuddy/DSH 客户现场仍需按版本单独验收。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

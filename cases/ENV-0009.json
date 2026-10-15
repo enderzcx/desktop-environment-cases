@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0009",
+  "title": "本地磁盘写满导致生成结果保存或取回失败",
+  "category": "storage",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "ENOSPC",
+    "磁盘空间",
+    "SQLite",
+    "local_disk_full",
+    "取回结果"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "上游可能已有结果，本地保存、数据库写入或手动取回失败，错误指引不明确。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "上游可能已有结果，本地保存、数据库写入或手动取回失败，错误指引不明确。"
+  ],
+  "environment": [
+    "数据目录所在磁盘空间不足；错误可能来自文件或 SQLite 本地持久化。"
+  ],
+  "cause": {
+    "summary": "本地存储失败未保留结构化磁盘不足类别，用户可能被引导重复生成；手动取回的通用错误也曾覆盖原始原因。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "检查数据目录所在卷的可用空间及本地错误链，不使用上游响应中的文字判定本机磁盘状态。",
+      "区分生成、下载、物化和完成状态写入各阶段，保留原任务身份。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "仅在本地存储入口分类为 local_disk_full，保留原状态，释放空间后优先继续取回原任务。",
+      "steps": [
+        "仅在本地存储入口分类为 local_disk_full，保留原状态，释放空间后优先继续取回原任务。"
+      ],
+      "verification": [
+        "本地落盘/数据库/手动取回失败给出空间指引；恢复空间后原任务可继续处理，不能重复计费创建。"
+      ],
+      "risks": [
+        "清理仅针对明确可丢弃缓存；不得删除项目、原素材和恢复凭据。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #157 对机制和处理的记录：本地存储失败未保留结构化磁盘不足类别，用户可能被引导重复生成；手动取回的通用错误也曾覆盖原始原因。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/157"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 c596a342244ceeb674633b6a9bf974ef860310f6：backend/internal/kernel/local_storage.go",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/c596a342244ceeb674633b6a9bf974ef860310f6/backend/internal/kernel/local_storage.go"
+    }
+  ],
+  "limitations": [
+    "PR 明确保留 Windows errno 112/39 直接匹配和部分独立上传报错为后续增强，不能宣称所有磁盘满错误都已覆盖。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

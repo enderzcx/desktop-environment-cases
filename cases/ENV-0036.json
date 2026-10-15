@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0036",
+  "title": "图片读取或解码失败被画布显示成透明空节点",
+  "category": "media",
+  "platforms": [
+    "windows",
+    "macos"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "Blob URL",
+    "图片透明",
+    "解码失败",
+    "重新加载",
+    "缩放"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "生成看似完成，图片节点却接近透明，缩小画布后错误文字和重试入口难以发现。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "生成看似完成，图片节点却接近透明，缩小画布后错误文字和重试入口难以发现。"
+  ],
+  "environment": [
+    "原始报告来自 Windows；完整页面人工验证在 macOS Chromium 开发环境完成。"
+  ],
+  "cause": {
+    "summary": "已确认资源访问/解码失败时仍使用透明外壳，错误反馈随画布缩放而过小；原报告首次读取失败诱因未知。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "区分上游生成、后端文件保存、鉴权读取、Blob 解码与节点展示。",
+      "检查原 storageKey/resource 身份和错误事件；不要凭生成 succeeded 判断可见。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "失败状态用可见背景和固定屏幕尺寸的重试入口；重新加载原资源并记录脱敏失败阶段。",
+      "steps": [
+        "失败状态用可见背景和固定屏幕尺寸的重试入口；重新加载原资源并记录脱敏失败阶段。"
+      ],
+      "verification": [
+        "注入网络失败或坏图片字节后错误可见；解除故障后缩小状态也可点击恢复，任务数量不增加。"
+      ],
+      "risks": [
+        "不能为修复预览而重新付费生成，也不能把空白节点当作素材已丢失后直接删除。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #138 对机制和处理的记录：已确认资源访问/解码失败时仍使用透明外壳，错误反馈随画布缩放而过小；原报告首次读取失败诱因未知。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/138"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 5e2ad6022addd387001d08a478e3316ee2266524：web/src/components/canvas/canvas-node-content.tsx",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/5e2ad6022addd387001d08a478e3316ee2266524/web/src/components/canvas/canvas-node-content.tsx"
+    }
+  ],
+  "limitations": [
+    "confirmed 只表示失败被透明展示的 UI 机制已确认，不表示已找到原 Windows 首次读失败的环境原因。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

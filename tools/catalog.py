@@ -16,6 +16,8 @@ STATUS = {"reported": "待复现", "confirmed": "根因已确认", "superseded":
 
 def validate_case(case):
     VALIDATOR.validate(case)
+    if "unknown" in case["platforms"] and len(case["platforms"]) != 1:
+        raise ValueError("unknown platform cannot be combined with known platforms")
     evidence = {item["id"]: item for item in case["evidence"]}
     if len(evidence) != len(case["evidence"]):
         raise ValueError("duplicate evidence id")
@@ -124,7 +126,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["build", "check", "search"])
     parser.add_argument("query", nargs="?", default="")
-    parser.add_argument("--platform", choices=["windows", "macos", "linux"])
+    parser.add_argument("--platform", choices=["windows", "macos", "linux", "unknown"])
     parser.add_argument("--confirmed", action="store_true")
     args = parser.parse_args()
     cases = load_cases()

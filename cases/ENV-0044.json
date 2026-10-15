@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0044",
+  "title": "慢速生成结果下载超过总期限且无续传导致画布迟迟没有成品",
+  "category": "network",
+  "platforms": [
+    "windows",
+    "macos",
+    "linux"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "90秒",
+    "unexpected EOF",
+    "生成结果",
+    "Range",
+    "交付"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "上游显示成功并扣费，本地结果下载中断，画布提示尚未更新或被误报为版本冲突。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "上游显示成功并扣费，本地结果下载中断，画布提示尚未更新或被误报为版本冲突。"
+  ],
+  "environment": [
+    "生成产物下载使用单次 GET、历史 90 秒总超时和无 Range；慢网络或中途断连时重复从零开始。"
+  ],
+  "cause": {
+    "summary": "上游成功与本地可用混为一谈，下载无恢复能力，前端在文件未物化时过早绑定，并将未就绪错误当成版本冲突。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "分开记录上游完成、下载字节、素材物化和画布绑定四步。",
+      "用受控中途断链重放原任务，确认请求是否 Range 续传和绑定是否等到资源可用。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "为产物下载引入持久 partial/sidecar 与有界恢复；资源未就绪时继续等同一任务，准确区分交付和 revision 错误。",
+      "steps": [
+        "为产物下载引入持久 partial/sidecar 与有界恢复；资源未就绪时继续等同一任务，准确区分交付和 revision 错误。"
+      ],
+      "verification": [
+        "断链后能恢复完整字节并绑定同一原任务；部分下载不得标为成功，不能重发付费创建。"
+      ],
+      "risks": [
+        "后续 #133 增加交付控制期限，不能把历史“无总超时”实现当作所有当前版本永久策略。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #123 对机制和处理的记录：上游成功与本地可用混为一谈，下载无恢复能力，前端在文件未物化时过早绑定，并将未就绪错误当成版本冲突。",
+      "scope": "本轮回读合并状态，并核对固定代码/原有验收资料；未重新执行历史验证，不据此认定原客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/123"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 463e860330270cfe91a55951ae04ffc582d3dc5f：backend/internal/outbound/resumable.go",
+      "scope": "固定历史代码或验收资料。复检步骤是未来重放条件，不表示本轮已经在相应系统执行。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/463e860330270cfe91a55951ae04ffc582d3dc5f/backend/internal/outbound/resumable.go"
+    },
+    {
+      "id": "E3",
+      "type": "source_analysis",
+      "summary": "关联 PR #133：fix(release): v1.7.17 修复结果取回、会话接续与桌面体验",
+      "scope": "后续修复或相邻路径证据；不能将旧版本机制当作当前所有版本行为。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/133"
+    }
+  ],
+  "limitations": [
+    "ENV-0023 是更新包下载器；本例是任务产物交付路径。历史故障回归使用受控上游，不代表本轮客户现场实测。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

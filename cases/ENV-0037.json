@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0037",
+  "title": "第三方批量生图上游成功而本地结果未知（待定位）",
+  "category": "network",
+  "platforms": [
+    "unknown"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "图片结果尚未确认",
+    "批量15张",
+    "第三方API",
+    "响应中断"
+  ],
+  "status": "reported",
+  "updated_at": "2026-10-15",
+  "summary": "批量生图部分任务提示结果尚未确认，但 API 控制台显示成功并产生费用。 当前保留为待定位报告。",
+  "symptoms": [
+    "批量生图部分任务提示结果尚未确认，但 API 控制台显示成功并产生费用。"
+  ],
+  "environment": [
+    "报告涉及自配 API 和一批 15 张图片；Issue 表单填写版本为 1.1.75，尚未独立核对，不推断其是否笔误。OS、协议和对应失败请求未提供足够信息。"
+  ],
+  "cause": {
+    "summary": "未确定。响应断连、协议字段解析、并发和本地保存等均需要原请求证据区分，不能从统一错误提示选定一个环境根因。",
+    "confidence": "unknown",
+    "evidence_ids": [
+      "E1"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "保留原任务及上游身份，取得脱敏 requestId、HTTP 状态、receivedBytes、outcome 和失败阶段。",
+      "把控制台成功记录逐项关联到本地失败任务，不用另一批生成验证旧任务。"
+    ],
+    "exclusions": [
+      "当前证据不足以排除其他根因；不得仅按相似错误提示认定环境问题。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "diagnostic",
+      "description": "优先查询和恢复已生成的原结果；证据不足时停止自动重发并继续诊断。",
+      "steps": [
+        "保留原任务及上游身份，取得脱敏 requestId、HTTP 状态、receivedBytes、outcome 和失败阶段。",
+        "把控制台成功记录逐项关联到本地失败任务，不用另一批生成验证旧任务。"
+      ],
+      "verification": [
+        "只有原任务文件、资源绑定及账单对应一致，才可确认恢复；模拟断线回归不证明原客户根因解决。"
+      ],
+      "risks": [
+        "盲重发可能重复扣费；不要收集 API Key 或完整诊断数据库。"
+      ],
+      "evidence_ids": [
+        "E1"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "customer_report",
+      "summary": "历史 Issue #118 的脱敏症状与排查回复：批量生图部分任务提示结果尚未确认，但 API 控制台显示成功并产生费用。",
+      "scope": "本轮回读公开 Issue 及后续回复；没有取得新的现场日志或复现，不把其他修复等同此报告已解决。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/issues/118"
+    }
+  ],
+  "limitations": [
+    "关联的删除确认和恢复次数修复不能证明本报告的批量丢图根因已修复。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}

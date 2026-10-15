@@ -53,6 +53,17 @@ class CatalogTests(unittest.TestCase):
         self.case["status"] = "reported"
         self.assertFalse(matches(self.case, "toSorted", confirmed=True))
 
+    def test_unknown_platform_is_preserved_and_searchable(self):
+        self.case["platforms"] = ["unknown"]
+        validate_case(self.case)
+        self.assertTrue(matches(self.case, "toSorted", "unknown"))
+        self.assertFalse(matches(self.case, "toSorted", "windows"))
+
+    def test_unknown_and_known_platforms_cannot_be_mixed(self):
+        self.case["platforms"] = ["unknown", "windows"]
+        with self.assertRaisesRegex(ValueError, "cannot be combined"):
+            validate_case(self.case)
+
     def test_generated_document_keeps_verification_limits(self):
         output = generated_files([self.case])
         document = output[next(path for path in output if path.as_posix() == "docs/cases/ENV-0001.md")]

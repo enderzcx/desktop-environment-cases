@@ -7,10 +7,61 @@
 ## 待复现
 
 - [ENV-0002 · Git Bash 调用 Windows 安装器时斜杠参数可能被转换为路径](cases/ENV-0002.md) — windows
+- [ENV-0037 · 第三方批量生图上游成功而本地结果未知（待定位）](cases/ENV-0037.md) — unknown
+- [ENV-0038 · Windows 图片二次处理出现空指针 panic（待复现）](cases/ENV-0038.md) — windows
+- [ENV-0039 · 更新下载完成后准备阶段超时（具体瓶颈待定位）](cases/ENV-0039.md) — unknown
+- [ENV-0053 · Seedance 调用报告 HTTP 415，具体拒绝环节待核对](cases/ENV-0053.md) — unknown
 
 ## 根因已确认
 
 - [ENV-0001 · 旧 WebView 缺少 Array.toSorted 导致画布加载失败](cases/ENV-0001.md) — windows
+- [ENV-0003 · 减少动态效果使模型菜单定位到视口外](cases/ENV-0003.md) — unknown
+- [ENV-0004 · Windows 安装目录重命名遇到共享冲突或错误 32](cases/ENV-0004.md) — windows
+- [ENV-0005 · 英文构建机把 NSIS 中文提示编译成乱码](cases/ENV-0005.md) — windows
+- [ENV-0006 · 运行中的临时文件阻止整个存储目录迁移](cases/ENV-0006.md) — windows
+- [ENV-0007 · 迁移或重启后数据目录发现错误导致工作区看似丢失](cases/ENV-0007.md) — windows, macos
+- [ENV-0008 · 本地凭据文件读取或解密失败被误报为模型参数错误](cases/ENV-0008.md) — windows, macos, linux
+- [ENV-0009 · 本地磁盘写满导致生成结果保存或取回失败](cases/ENV-0009.md) — windows, macos, linux
+- [ENV-0010 · 桌面启动未继承终端代理导致更新或组件下载失败](cases/ENV-0010.md) — windows, macos
+- [ENV-0011 · 本地深度子进程补下载模型时没有继承桌面代理](cases/ENV-0011.md) — windows, macos
+- [ENV-0012 · PowerShell 生成的 ZIP 使用反斜杠条目被解压器拒绝](cases/ENV-0012.md) — windows
+- [ENV-0013 · PowerShell 5.1 提前关闭输出管道使正常工具自检失败](cases/ENV-0013.md) — windows
+- [ENV-0014 · Windows 无法解码 HEVC 且缺少可用 FFmpeg 预览工具](cases/ENV-0014.md) — windows
+- [ENV-0015 · 构建目录已有媒体运行时但最终更新 ZIP 漏装](cases/ENV-0015.md) — windows
+- [ENV-0016 · 已发布旧更新器拒绝新增 CLI 或媒体目录](cases/ENV-0016.md) — windows
+- [ENV-0017 · Windows 原生连接重置未被识别导致任务提前失败](cases/ENV-0017.md) — windows
+- [ENV-0018 · macOS 首次安装被 Gatekeeper 拦截而更新清单验签正常](cases/ENV-0018.md) — macos
+- [ENV-0019 · AppData 影子文件与运行时发现路径冲突（MSIX 待实测）](cases/ENV-0019.md) — windows
+- [ENV-0020 · Windows 发布包漏装 CLI 使 MCP 错启动桌面主程序](cases/ENV-0020.md) — windows
+- [ENV-0021 · Windows GUI 启动 Node 助手时出现额外黑色控制台](cases/ENV-0021.md) — windows
+- [ENV-0022 · 成功升级后的暂存目录长期累积占用磁盘](cases/ENV-0022.md) — windows, macos
+- [ENV-0023 · 慢线路下载被总时长上限打断且不能续传](cases/ENV-0023.md) — windows, macos
+- [ENV-0024 · Windows 在只读下载句柄上 Sync 导致校验后失败](cases/ENV-0024.md) — windows
+- [ENV-0025 · SQLite 本地时区时间与 UTC 字符串比较使诊断包漏采](cases/ENV-0025.md) — windows, macos, linux
+- [ENV-0026 · 旧预览数据库迁移编号冲突导致正式版缺列](cases/ENV-0026.md) — windows, macos, linux
+- [ENV-0027 · Windows 原生保存框改名后丢失媒体扩展名](cases/ENV-0027.md) — windows
+- [ENV-0028 · 低速本地深度处理超过前端等待时间被提前判失败](cases/ENV-0028.md) — windows, macos
+- [ENV-0029 · 远端视频取帧的凭据策略与解码能力不匹配](cases/ENV-0029.md) — windows, macos
+- [ENV-0030 · 浅色 Windows 系统主题让深色桌面应用出现白色标题栏](cases/ENV-0030.md) — windows
+- [ENV-0031 · 续传重置缓存失败后旧字节与新标识混用](cases/ENV-0031.md) — windows, macos, linux
+- [ENV-0032 · 弱 ETag 或仅 Last-Modified 不足以保证断点字节属于同一对象](cases/ENV-0032.md) — windows, macos, linux
+- [ENV-0033 · 发布机 Bun 版本不支持已提交锁文件格式](cases/ENV-0033.md) — windows, macos
+- [ENV-0034 · Windows CI 固定 MSYS2 路径与 Action 实际安装位置不同](cases/ENV-0034.md) — windows
+- [ENV-0035 · Intel Mac 发布误用 ARM runner 造成双架构参数冲突](cases/ENV-0035.md) — macos
+- [ENV-0036 · 图片读取或解码失败被画布显示成透明空节点](cases/ENV-0036.md) — windows, macos
+- [ENV-0040 · 更新准备重复解压并刷盘使低速磁盘等待放大](cases/ENV-0040.md) — windows, macos
+- [ENV-0041 · 模型目录很大时重复线性查找造成选择框长时间阻塞](cases/ENV-0041.md) — windows, macos, linux
+- [ENV-0042 · 原生 WebView 的本地模型中转预检缺少允许请求头](cases/ENV-0042.md) — macos
+- [ENV-0043 · macOS WKWebView 默认禁止元素全屏导致视频无法全屏](cases/ENV-0043.md) — macos
+- [ENV-0044 · 慢速生成结果下载超过总期限且无续传导致画布迟迟没有成品](cases/ENV-0044.md) — windows, macos, linux
+- [ENV-0045 · 视频结果地址过期或线路停滞时没有恢复同一任务的可达来源](cases/ENV-0045.md) — windows, macos, linux
+- [ENV-0046 · 同一进程并发首次安装深度组件共写下载缓存](cases/ENV-0046.md) — windows, macos
+- [ENV-0047 · PowerShell 5.1 读取无 BOM 中文脚本时出现编码解析故障](cases/ENV-0047.md) — windows
+- [ENV-0048 · 低帧率视频使用整帧时长容差会放宽输入秒数上限](cases/ENV-0048.md) — windows, macos
+- [ENV-0049 · 独立工作区未安装 Node 宿主依赖使 Go 集成测试报模块缺失](cases/ENV-0049.md) — windows, macos, linux
+- [ENV-0050 · 有效 MP4 以 octet-stream 返回时被媒体类型判断拒绝](cases/ENV-0050.md) — windows, macos, linux
+- [ENV-0051 · 多视频画布平移触发无效重渲染和模糊合成开销](cases/ENV-0051.md) — windows, macos, linux
+- [ENV-0052 · 桌面重启换端口后常驻 MCP 进程继续使用旧地址](cases/ENV-0052.md) — windows, macos, linux
 
 ## 已被取代
 

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "ENV-0004",
+  "title": "Windows 安装目录重命名遇到共享冲突或错误 32",
+  "category": "installer",
+  "platforms": [
+    "windows"
+  ],
+  "products": [
+    "BeefTV"
+  ],
+  "keywords": [
+    "NSIS",
+    "MoveFileW",
+    "错误32",
+    "文件锁"
+  ],
+  "status": "confirmed",
+  "updated_at": "2026-10-15",
+  "summary": "解压完成后无法移动临时程序目录，或覆盖升级时无法移动旧安装目录。 案例收录已确认的具体机制；发布与客户恢复另看证据。",
+  "symptoms": [
+    "解压完成后无法移动临时程序目录，或覆盖升级时无法移动旧安装目录。"
+  ],
+  "environment": [
+    "Windows NSIS 安装器；新解压可执行文件或旧程序目录存在短暂/持久共享句柄。"
+  ],
+  "cause": {
+    "summary": "旧流程立即重命名新解压的整目录，Windows 文件共享限制可阻止目录移动；短重试窗口不足。具体客户机器的句柄持有者未被独立确认，不能一律归为 Defender。",
+    "confidence": "confirmed",
+    "evidence_ids": [
+      "E1",
+      "E2"
+    ]
+  },
+  "detection": {
+    "checks": [
+      "记录失败阶段及 Win32 错误码，区分写权限、共享冲突和路径问题。",
+      "在隔离环境使用不含 FILE_SHARE_DELETE 的真实句柄验证移动确实失败，并验证锁释放后行为。"
+    ],
+    "exclusions": [
+      "仅当所列环境与检查结果吻合时适用；相同症状仍需排除其他原因。"
+    ]
+  },
+  "remediations": [
+    {
+      "kind": "product_fix",
+      "description": "首次安装直接解压到目标目录；覆盖升级保留旧版备份和回退，对移动共享冲突进行有界重试并提供重试/取消。",
+      "steps": [
+        "首次安装直接解压到目标目录；覆盖升级保留旧版备份和回退，对移动共享冲突进行有界重试并提供重试/取消。"
+      ],
+      "verification": [
+        "锁定时旧程序和用户数据保留；释放锁后可重试，失败回退不删除仍需恢复的程序目录。"
+      ],
+      "risks": [
+        "不能通过关闭安全软件、无限重试或先删除旧程序绕过锁；不要把所有错误 5/32 当成同一原因。"
+      ],
+      "evidence_ids": [
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "source_analysis",
+      "summary": "历史已合并 PR #151 对机制和处理的记录：旧流程立即重命名新解压的整目录，Windows 文件共享限制可阻止目录移动；短重试窗口不足。具体客户机器的句柄持有者未被独立确认，不能一律归为 Defender。",
+      "scope": "本轮回读 PR 合并状态，并核对固定提交所列代码/验收记录；历史验证不记为本轮重跑，不据此认定客户已恢复。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/151"
+    },
+    {
+      "id": "E2",
+      "type": "source_analysis",
+      "summary": "固定提交 75b866ef8896b142fb89ada16f65053d285f2eb9：scripts/installers/windows.nsi",
+      "scope": "固定历史代码或验收资料，用于复查机制及原验证范围。案例中的复检是建议步骤，不代表本轮执行结果。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/blob/75b866ef8896b142fb89ada16f65053d285f2eb9/scripts/installers/windows.nsi"
+    },
+    {
+      "id": "E3",
+      "type": "source_analysis",
+      "summary": "关联 PR #135：fix: 修复更新保存误拦截，增强 Windows 安装失败重试与诊断",
+      "scope": "相关版本或相邻路径证据；请核对差异，不能把同次支持过程的其他修复替代当前根因。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/135"
+    },
+    {
+      "id": "E4",
+      "type": "source_analysis",
+      "summary": "关联 PR #114：feat(desktop): 三平台安装包与用户数据保留",
+      "scope": "相关版本或相邻路径证据；请核对差异，不能把同次支持过程的其他修复替代当前根因。",
+      "observed_at": "2026-10-15",
+      "reference": "https://github.com/glanderness/BeefTV/pull/114"
+    }
+  ],
+  "limitations": [
+    "历史原生验收验证锁机制；未证明每个客户现场的具体锁来源或新安装包恢复情况。",
+    "本轮是历史知识补录，没有在客户机器执行修复，也没有重跑历史付费生成、原生安装或平台矩阵。"
+  ]
+}
